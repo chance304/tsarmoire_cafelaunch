@@ -274,6 +274,25 @@
       color: white;
     }
 
+    .form-cta:disabled {
+      opacity: 0.45;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .field-error {
+      display: none;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      color: rgba(210, 95, 65, 0.9);
+      text-transform: uppercase;
+      margin-top: 8px;
+    }
+
+    .field.invalid .field-error  { display: block; }
+    .field.invalid input         { border-bottom-color: rgba(210, 95, 65, 0.55); }
+
     /* ── Stagger-in animation system ────────────────────────── */
     .s {
       opacity: 0;
@@ -401,20 +420,22 @@
       We're inviting a limited number of guests. If selected, we'll reach out directly.<br>
       <strong>Limited seats. Thoughtfully curated.</strong>
     </div>
-    <form class="form-wrap s" id="rsvp" onsubmit="handleSubmit(event)">
-      <div class="field">
-        <label>Full Name</label>
-        <input type="text" placeholder="Your name" required autocomplete="name">
+    <form class="form-wrap s" id="rsvp" onsubmit="handleSubmit(event)" novalidate>
+      <div class="field" id="field-name">
+        <label for="f-name">Full Name</label>
+        <input id="f-name" type="text" placeholder="Your name" autocomplete="name">
+        <span class="field-error" id="err-name"></span>
+      </div>
+      <div class="field" id="field-email">
+        <label for="f-email">Email Address</label>
+        <input id="f-email" type="email" placeholder="your@email.com" autocomplete="email">
+        <span class="field-error" id="err-email"></span>
       </div>
       <div class="field">
-        <label>Email Address</label>
-        <input type="email" placeholder="your@email.com" required autocomplete="email">
+        <label for="f-ig">Instagram Handle</label>
+        <input id="f-ig" type="text" placeholder="@handle" autocomplete="off">
       </div>
-      <div class="field">
-        <label>Instagram Handle</label>
-        <input type="text" placeholder="@handle" autocomplete="off">
-      </div>
-      <button type="submit" class="form-cta">Register Interest →</button>
+      <button type="submit" class="form-cta" id="rsvp-btn">Register Interest →</button>
     </form>
     <div class="ghost">03</div>
   </div>
@@ -505,18 +526,104 @@
     }, 440);
   }
 
-  /* ── Form submit ─────────────────────────────────────────── */
+  /* ── Registration ────────────────────────────────────────── */
+  const STORE_KEY   = 'tsa_cafe_registrations';
+  const SCRIPT_URL  = 'https://script.google.com/macros/s/AKfycbzAWsjjPsD2yt-eGGhiMeMfAsDfBbFagZNXIDzi5yz271zjpuCFxeqHlvTh05sKRpZh/exec';
+
+  function setFieldError(fieldEl, errEl, msg) {
+    fieldEl.classList.add('invalid');
+    errEl.textContent = msg;
+  }
+
+  function clearFieldError(fieldEl) {
+    fieldEl.classList.remove('invalid');
+  }
+
+  /* Clear error as soon as the user edits the field */
+  document.getElementById('f-name').addEventListener('input', () =>
+    clearFieldError(document.getElementById('field-name')));
+  document.getElementById('f-email').addEventListener('input', () =>
+    clearFieldError(document.getElementById('field-email')));
+
   function handleSubmit(e) {
     e.preventDefault();
-    /* TODO: wire up to backend / email service */
-    go(1);
+
+    const nameVal  = document.getElementById('f-name').value.trim();
+    const emailVal = document.getElementById('f-email').value.trim();
+    const igVal    = document.getElementById('f-ig').value.trim();
+
+    const fieldName  = document.getElementById('field-name');
+    const fieldEmail = document.getElementById('field-email');
+    const errName    = document.getElementById('err-name');
+    const errEmail   = document.getElementById('err-email');
+
+    clearFieldError(fieldName);
+    clearFieldError(fieldEmail);
+
+    let valid = true;
+
+    if (!nameVal) {
+      setFieldError(fieldName, errName, 'Please enter your name');
+      valid = false;
+    }
+
+    const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailVal) {
+      setFieldError(fieldEmail, errEmail, 'Please enter your email');
+      valid = false;
+    } else if (!emailRx.test(emailVal)) {
+      setFieldError(fieldEmail, errEmail, 'Please enter a valid email');
+      valid = false;
+    }
+
+    if (!valid) return;
+
+    /* Duplicate check */
+    const existing = JSON.parse(localStorage.getItem(STORE_KEY) || '[]');
+    if (existing.some(r => r.email.toLowerCase() === emailVal.toLowerCase())) {
+      setFieldError(fieldEmail, errEmail, 'Already registered with this email');
+      return;
+    }
+
+    /* Loading state */
+    const btn = document.getElementById('rsvp-btn');
+    btn.textContent = 'Sending →';
+    btn.disabled = true;
+
+    /* Build entry */
+    const entry = {
+      id:            'tsa-' + Date.now(),
+      name:          nameVal,
+      email:         emailVal,
+      instagram:     igVal || null,
+      registered_at: new Date().toISOString()
+    };
+
+    /* Persist */
+    existing.push(entry);
+    localStorage.setItem(STORE_KEY, JSON.stringify(existing));
+
+    /* POST to Google Apps Script — fire and forget */
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(entry),
+      mode: 'no-cors'
+    }).catch(() => {});
+
+    /* Navigate to thank-you after brief pause */
+    setTimeout(() => {
+      btn.textContent = 'Register Interest →';
+      btn.disabled = false;
+      go(1);
+    }, 500);
   }
 
   /* ── Keyboard ────────────────────────────────────────────── */
   document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight' || e.key === 'ArrowDown')  go(1);
-    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')    go(-1);
-    if (e.key === 'Enter' && cur !== 2) go(1); /* not on form page */
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { if (cur !== 2) go(1); }
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   go(-1);
+    if (e.key === 'Enter'      && cur !== 2)              go(1);
   });
 
   /* ── Touch / swipe ───────────────────────────────────────── */
@@ -524,7 +631,10 @@
   document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; },   { passive: true });
   document.addEventListener('touchend',   e => {
     const dx = e.changedTouches[0].clientX - tx;
-    if (Math.abs(dx) > 55) go(dx < 0 ? 1 : -1);
+    if (Math.abs(dx) > 55) {
+      if (cur === 2 && dx < 0) return; /* must submit form to advance */
+      go(dx < 0 ? 1 : -1);
+    }
   }, { passive: true });
 
   /* ── Init ────────────────────────────────────────────────── */
