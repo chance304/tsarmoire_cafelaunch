@@ -1,0 +1,185 @@
+/* ── State ───────────────────────────────────────────────── */
+let cur   = 0;
+const N   = 4;
+let busy  = false;
+
+const pages    = document.querySelectorAll('.page');
+const curtain  = document.getElementById('curtain');
+const btnBack  = document.getElementById('btn-back');
+const btnFwd   = document.getElementById('btn-fwd');
+const counter  = document.getElementById('counter');
+const progFill = document.getElementById('prog-fill');
+
+/* ── Utilities ───────────────────────────────────────────── */
+const pad = n => String(n + 1).padStart(2, '0');
+
+function syncChrome() {
+  counter.textContent = `${pad(cur)} / ${pad(N - 1)}`;
+  progFill.style.width = `${((cur + 1) / N) * 100}%`;
+  btnBack.disabled = cur === 0;
+  /* On form page: hide forward (user must submit); on last page: hide both nav */
+  btnFwd.style.display  = (cur === N - 1) ? 'none' : 'flex';
+  btnBack.style.display = (cur === N - 1) ? 'none' : 'flex';
+}
+
+/* ── Transition ─────────────────────────────────────────── */
+/*
+  Curtain: a vertical wipe.
+  1. scaleY(0→1) from bottom → black covers screen
+  2. Swap page content
+  3. scaleY(1→0) from top → black reveals new page
+*/
+function go(dir) {
+  if (busy) return;
+  const next = cur + dir;
+  if (next < 0 || next >= N) return;
+
+  busy = true;
+
+  /* Phase 1 — curtain closes (wipes UP) */
+  curtain.style.transition = 'transform 0.42s cubic-bezier(0.76, 0, 0.24, 1)';
+  curtain.style.transformOrigin = 'bottom';
+  curtain.style.transform = 'scaleY(1)';
+
+  setTimeout(() => {
+    /* Phase 2 — swap pages */
+    pages[cur].classList.remove('active', 'entering');
+    pages[next].classList.remove('entering');
+    void pages[next].offsetWidth; /* force reflow before re-adding class */
+    pages[next].classList.add('active');
+    cur = next;
+    syncChrome();
+    const focusTarget = pages[cur].querySelector('input, button:not(:disabled)');
+    if (focusTarget) focusTarget.focus({ preventScroll: true });
+
+    /* Tiny pause so curtain holds, then open */
+    setTimeout(() => {
+      /* Phase 3 — curtain opens (wipes UP from top) */
+      curtain.style.transition = 'transform 0.48s cubic-bezier(0.76, 0, 0.24, 1)';
+      curtain.style.transformOrigin = 'top';
+      curtain.style.transform = 'scaleY(0)';
+
+      /* Phase 4 — stagger content in */
+      setTimeout(() => {
+        pages[cur].classList.add('entering');
+        busy = false;
+      }, 80);
+
+    }, 60);
+
+  }, 440);
+}
+
+/* ── Registration ────────────────────────────────────────── */
+const STORE_KEY  = 'tsa_cafe_registrations';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzAWsjjPsD2yt-eGGhiMeMfAsDfBbFagZNXIDzi5yz271zjpuCFxeqHlvTh05sKRpZh/exec';
+
+function setFieldError(fieldEl, errEl, msg) {
+  fieldEl.classList.add('invalid');
+  errEl.textContent = msg;
+}
+
+function clearFieldError(fieldEl) {
+  fieldEl.classList.remove('invalid');
+}
+
+/* Clear error as soon as the user edits the field */
+document.getElementById('f-name').addEventListener('input', () =>
+  clearFieldError(document.getElementById('field-name')));
+document.getElementById('f-email').addEventListener('input', () =>
+  clearFieldError(document.getElementById('field-email')));
+
+function handleSubmit(e) {
+  e.preventDefault();
+
+  const nameVal  = document.getElementById('f-name').value.trim();
+  const emailVal = document.getElementById('f-email').value.trim();
+  const igVal    = document.getElementById('f-ig').value.trim();
+
+  const fieldName  = document.getElementById('field-name');
+  const fieldEmail = document.getElementById('field-email');
+  const errName    = document.getElementById('err-name');
+  const errEmail   = document.getElementById('err-email');
+
+  clearFieldError(fieldName);
+  clearFieldError(fieldEmail);
+
+  let valid = true;
+
+  if (!nameVal) {
+    setFieldError(fieldName, errName, 'Please enter your name');
+    valid = false;
+  }
+
+  const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailVal) {
+    setFieldError(fieldEmail, errEmail, 'Please enter your email');
+    valid = false;
+  } else if (!emailRx.test(emailVal)) {
+    setFieldError(fieldEmail, errEmail, 'Please enter a valid email');
+    valid = false;
+  }
+
+  if (!valid) return;
+
+  /* Duplicate check */
+  const existing = JSON.parse(localStorage.getItem(STORE_KEY) || '[]');
+  if (existing.some(r => r.email.toLowerCase() === emailVal.toLowerCase())) {
+    setFieldError(fieldEmail, errEmail, 'Already registered with this email');
+    return;
+  }
+
+  /* Loading state */
+  const btn = document.getElementById('rsvp-btn');
+  btn.textContent = 'Sending →';
+  btn.disabled = true;
+
+  /* Build entry */
+  const entry = {
+    id:            'tsa-' + Date.now(),
+    name:          nameVal,
+    email:         emailVal,
+    instagram:     igVal || null,
+    registered_at: new Date().toISOString()
+  };
+
+  /* Persist */
+  existing.push(entry);
+  localStorage.setItem(STORE_KEY, JSON.stringify(existing));
+
+  /* POST to Google Apps Script — fire and forget */
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify(entry),
+    mode: 'no-cors'
+  }).catch(() => {});
+
+  /* Navigate to thank-you after brief pause */
+  setTimeout(() => {
+    btn.textContent = 'Register Interest →';
+    btn.disabled = false;
+    go(1);
+  }, 500);
+}
+
+/* ── Keyboard ────────────────────────────────────────────── */
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { if (cur !== 2) go(1); }
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   go(-1);
+  if (e.key === 'Enter'      && cur !== 2)              go(1);
+});
+
+/* ── Touch / swipe ───────────────────────────────────────── */
+let tx = 0;
+document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; },   { passive: true });
+document.addEventListener('touchend',   e => {
+  const dx = e.changedTouches[0].clientX - tx;
+  if (Math.abs(dx) > 55) {
+    if (cur === 2 && dx < 0) return; /* must submit form to advance */
+    go(dx < 0 ? 1 : -1);
+  }
+}, { passive: true });
+
+/* ── Init ────────────────────────────────────────────────── */
+syncChrome();
