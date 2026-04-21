@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TSA CAFE — May 12</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%; width: 100%;
+      overflow: hidden;
+      background: #0d0b08;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       BACKGROUND — PLACEHOLDER FOR DESIGN TEAM
+       Replace the gradient below with the confirmed image:
+       background: url('your-image.jpg') center/cover no-repeat;
+       Add a dark overlay if needed for text legibility.
+    ═══════════════════════════════════════════════════════════ */
+    #bg {
+      position: fixed; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse at 75% 10%, rgba(100, 68, 38, 0.45) 0%, transparent 55%),
+        radial-gradient(ellipse at 15% 90%, rgba(80, 50, 28, 0.35) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(40, 28, 16, 0.6) 0%, transparent 80%),
+        linear-gradient(170deg, #0d0b08 0%, #1c1308 20%, #281a0d 45%, #1e1409 70%, #0d0b08 100%);
+      animation: breathe 18s ease-in-out infinite alternate;
+    }
+
+    @keyframes breathe {
+      0%   { filter: brightness(1) saturate(1); }
+      100% { filter: brightness(1.1) saturate(1.12); }
+    }
+
+    /* Grain / film texture */
+    #grain {
+      position: fixed; inset: -150px; z-index: 1;
+      width: calc(100% + 300px); height: calc(100% + 300px);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.038;
+      pointer-events: none;
+      animation: grainShift 0.4s steps(3) infinite;
+    }
+
+    @keyframes grainShift {
+      0%   { transform: translate(0, 0) rotate(0deg); }
+      33%  { transform: translate(-3px, -2px) rotate(0.5deg); }
+      66%  { transform: translate(2px, 3px) rotate(-0.3deg); }
+      100% { transform: translate(-1px, 1px) rotate(0.2deg); }
+    }
+
+    /* ── Transition curtain ─────────────────────────────────── */
+    #curtain {
+      position: fixed; inset: 0; z-index: 500;
+      background: #0d0b08;
+      transform: scaleY(0);
+      transform-origin: bottom;
+      pointer-events: none;
+    }
+
+    /* ── Chrome elements ─────────────────────────────────────── */
+    #wordmark {
+      position: fixed; top: 36px; left: 52px;
+      z-index: 50;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300; font-size: 9.5px;
+      letter-spacing: 0.5em;
+      color: rgba(255,255,255,0.38);
+      text-transform: uppercase;
+      user-select: none;
+    }
+
+    #counter {
+      position: fixed; top: 40px; right: 52px;
+      z-index: 50;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 200; font-size: 11px;
+      letter-spacing: 0.18em;
+      color: rgba(255,255,255,0.22);
+      transition: opacity 0.4s;
+    }
+
+    /* Bottom progress line */
+    #prog-track {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: 1px; background: rgba(255,255,255,0.07);
+      z-index: 50;
+    }
+    #prog-fill {
+      height: 100%;
+      background: linear-gradient(90deg, rgba(197,163,105,0.5), rgba(220,190,140,0.8));
+      transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+      width: 25%;
+    }
+
+    /* Navigation arrows */
+    #nav {
+      position: fixed; bottom: 40px; right: 52px;
+      z-index: 50;
+      display: flex; gap: 10px;
+    }
+
+    .nav-btn {
+      width: 50px; height: 50px;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: transparent;
+      color: rgba(255,255,255,0.75);
+      cursor: pointer;
+      font-size: 15px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.3s, border-color 0.3s, color 0.3s, opacity 0.3s;
+      font-family: 'Montserrat', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .nav-btn:hover:not(:disabled) {
+      background: rgba(255,255,255,0.07);
+      border-color: rgba(197,163,105,0.5);
+      color: white;
+    }
+    .nav-btn:disabled { opacity: 0.15; cursor: default; }
+
+    /* ── Pages ───────────────────────────────────────────────── */
+    #stage { position: fixed; inset: 0; z-index: 10; }
+
+    .page {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      justify-content: center;
+      padding: 100px 52px 100px;
+      opacity: 0;
+      pointer-events: none;
+      will-change: opacity;
+    }
+
+    .page.active { opacity: 1; pointer-events: all; }
+
+    /* ── Page element atoms ──────────────────────────────────── */
+    .tag {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300; font-size: 9.5px;
+      letter-spacing: 0.5em;
+      color: rgba(197,163,105,0.75);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .rule {
+      width: 32px; height: 1px;
+      background: rgba(197,163,105,0.45);
+      margin-bottom: 42px;
+    }
+
+    .headline {
+      font-family: 'Cormorant Garamond', 'Georgia', serif;
+      font-weight: 300;
+      font-size: clamp(54px, 9.5vw, 100px);
+      color: rgba(250,247,241,0.96);
+      line-height: 1.02;
+      letter-spacing: -0.015em;
+      margin-bottom: 38px;
+    }
+
+    .headline em {
+      font-style: italic;
+      color: rgba(250,247,241,0.65);
+    }
+
+    .body {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300;
+      font-size: clamp(13px, 1.35vw, 14.5px);
+      color: rgba(255,255,255,0.58);
+      line-height: 2.05;
+      max-width: 430px;
+      margin-bottom: 14px;
+    }
+
+    .body strong {
+      font-weight: 400;
+      color: rgba(255,255,255,0.83);
+    }
+
+    .caption {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 200; font-size: 10px;
+      letter-spacing: 0.3em;
+      color: rgba(255,255,255,0.28);
+      text-transform: uppercase;
+      margin-top: 20px;
+    }
+
+    /* Ghost large text in corner */
+    .ghost {
+      position: absolute;
+      right: 40px; bottom: 50px;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-weight: 300;
+      font-size: clamp(100px, 18vw, 190px);
+      color: rgba(255,255,255,0.03);
+      line-height: 1; letter-spacing: -0.02em;
+      pointer-events: none; user-select: none;
+    }
+
+    /* ── Form ────────────────────────────────────────────────── */
+    .form-wrap { width: 100%; max-width: 390px; margin-top: 4px; }
+
+    .field { margin-bottom: 34px; }
+
+    .field label {
+      display: block;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300; font-size: 9.5px;
+      letter-spacing: 0.38em;
+      color: rgba(255,255,255,0.32);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .field input {
+      width: 100%; background: none;
+      border: none;
+      border-bottom: 1px solid rgba(255,255,255,0.16);
+      color: rgba(255,255,255,0.92);
+      font-family: 'Cormorant Garamond', 'Georgia', serif;
+      font-size: 22px; font-weight: 300;
+      padding: 4px 0 10px;
+      outline: none;
+      transition: border-color 0.4s;
+      -webkit-appearance: none;
+    }
+
+    .field input:focus {
+      border-bottom-color: rgba(197,163,105,0.65);
+    }
+
+    .field input::placeholder { color: rgba(255,255,255,0.1); }
+
+    .field input:-webkit-autofill,
+    .field input:-webkit-autofill:focus {
+      -webkit-box-shadow: 0 0 0 60px #1c1308 inset !important;
+      -webkit-text-fill-color: rgba(255,255,255,0.92) !important;
+      transition: background-color 9999s;
+    }
+
+    .form-cta {
+      margin-top: 8px;
+      padding: 15px 34px;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.28);
+      color: rgba(255,255,255,0.8);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300; font-size: 9.5px;
+      letter-spacing: 0.42em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.4s, border-color 0.4s, color 0.4s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .form-cta:hover {
+      background: rgba(197,163,105,0.08);
+      border-color: rgba(197,163,105,0.55);
+      color: white;
+    }
+
+    /* ── Stagger-in animation system ────────────────────────── */
+    .s {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: none;
+    }
+
+    /* When page is entering, trigger stagger animations */
+    .entering .s {
+      animation: sIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .entering .s:nth-child(1) { animation-delay: 0.06s; }
+    .entering .s:nth-child(2) { animation-delay: 0.16s; }
+    .entering .s:nth-child(3) { animation-delay: 0.29s; }
+    .entering .s:nth-child(4) { animation-delay: 0.42s; }
+    .entering .s:nth-child(5) { animation-delay: 0.54s; }
+    .entering .s:nth-child(6) { animation-delay: 0.64s; }
+    .entering .s:nth-child(7) { animation-delay: 0.73s; }
+    .entering .s:nth-child(8) { animation-delay: 0.81s; }
+
+    @keyframes sIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Responsive ──────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .page { padding: 90px 32px 90px; }
+      #wordmark { left: 32px; }
+      #counter  { right: 32px; }
+      #nav      { right: 32px; bottom: 36px; }
+      .ghost    { font-size: 100px; right: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Background & texture -->
+<div id="bg"></div>
+<div id="grain"></div>
+
+<!-- Transition curtain -->
+<div id="curtain"></div>
+
+<!-- Chrome -->
+<div id="wordmark">T's Armoire</div>
+<div id="counter">01 / 04</div>
+<div id="prog-track"><div id="prog-fill"></div></div>
+<div id="nav">
+  <button class="nav-btn" id="btn-back" onclick="go(-1)" disabled>←</button>
+  <button class="nav-btn" id="btn-fwd"  onclick="go(1)">→</button>
+</div>
+
+<!-- ═══════════ PAGES ═══════════ -->
+<div id="stage">
+
+  <!-- ─── PAGE 1 · Opening ───────────────────────────────────── -->
+  <div class="page active entering" id="p0">
+    <div class="tag s">An Intimate Invitation</div>
+    <div class="rule s"></div>
+    <div class="headline s">TSA<br><em>CAFE</em></div>
+    <div class="body s">A moment. A community.<br>A breakfast before the launch.</div>
+    <div class="caption s">May 12</div>
+    <div class="ghost">01</div>
+  </div>
+
+  <!-- ─── PAGE 2 · The Story ─────────────────────────────────── -->
+  <div class="page" id="p1">
+    <div class="tag s">The Experience</div>
+    <div class="rule s"></div>
+    <div class="headline s">Not just<br><em>a space.</em></div>
+    <div class="body s">TSA CAFE is not just a space — <strong>it's a moment.</strong></div>
+    <div class="body s">This May 12, we're opening our doors for an intimate breakfast experience with our community, before we officially launch.</div>
+    <div class="body s">Hosted by our founder, <strong>Deeya</strong>, this is a chance to connect, share, and step into the world of T's Armoire in its most personal form.</div>
+    <div class="ghost">02</div>
+  </div>
+
+  <!-- ─── PAGE 3 · Register ──────────────────────────────────── -->
+  <div class="page" id="p2">
+    <div class="tag s">Register Your Interest</div>
+    <div class="rule s"></div>
+    <div class="headline s" style="font-size: clamp(44px, 7vw, 78px); margin-bottom: 14px;">A few<br><em>details.</em></div>
+    <div class="body s" style="margin-bottom: 30px; font-size: 13px;">
+      We're inviting a limited number of guests. If selected, we'll reach out directly.<br>
+      <strong>Limited seats. Thoughtfully curated.</strong>
+    </div>
+    <form class="form-wrap s" id="rsvp" onsubmit="handleSubmit(event)">
+      <div class="field">
+        <label>Full Name</label>
+        <input type="text" placeholder="Your name" required autocomplete="name">
+      </div>
+      <div class="field">
+        <label>Email Address</label>
+        <input type="email" placeholder="your@email.com" required autocomplete="email">
+      </div>
+      <div class="field">
+        <label>Instagram Handle</label>
+        <input type="text" placeholder="@handle" autocomplete="off">
+      </div>
+      <button type="submit" class="form-cta">Register Interest →</button>
+    </form>
+    <div class="ghost">03</div>
+  </div>
+
+  <!-- ─── PAGE 4 · Thank You ─────────────────────────────────── -->
+  <div class="page" id="p3">
+    <div class="tag s">You're Registered</div>
+    <div class="rule s"></div>
+    <div class="headline s">Thank<br><em>you.</em></div>
+    <div class="body s">If selected, we'll reach out to you directly.</div>
+    <div class="body s">Keep an eye on your inbox.</div>
+    <div class="caption s">TSA CAFE — May 12</div>
+    <div class="ghost">TSA</div>
+  </div>
+
+</div>
+
+<script>
+  /* ── State ───────────────────────────────────────────────── */
+  let cur   = 0;
+  const N   = 4;
+  let busy  = false;
+
+  const pages    = document.querySelectorAll('.page');
+  const curtain  = document.getElementById('curtain');
+  const btnBack  = document.getElementById('btn-back');
+  const btnFwd   = document.getElementById('btn-fwd');
+  const counter  = document.getElementById('counter');
+  const progFill = document.getElementById('prog-fill');
+
+  /* ── Utilities ───────────────────────────────────────────── */
+  const pad = n => String(n + 1).padStart(2, '0');
+
+  function syncChrome() {
+    counter.textContent = `${pad(cur)} / ${pad(N - 1)}`;
+    progFill.style.width = `${((cur + 1) / N) * 100}%`;
+    btnBack.disabled = cur === 0;
+    /* On form page: hide forward (user must submit); on last page: hide both nav */
+    btnFwd.style.display  = (cur === N - 1) ? 'none' : 'flex';
+    btnBack.style.display = (cur === N - 1) ? 'none' : 'flex';
+  }
+
+  /* ── Transition ─────────────────────────────────────────── */
+  /*
+    Curtain: a vertical wipe.
+    1. scaleY(0→1) from bottom → black covers screen
+    2. Swap page content
+    3. scaleY(1→0) from top → black reveals new page
+  */
+  function go(dir) {
+    if (busy) return;
+    const next = cur + dir;
+    if (next < 0 || next >= N) return;
+
+    busy = true;
+
+    /* Phase 1 — curtain closes (wipes UP) */
+    curtain.style.transition = 'transform 0.42s cubic-bezier(0.76, 0, 0.24, 1)';
+    curtain.style.transformOrigin = 'bottom';
+    curtain.style.transform = 'scaleY(1)';
+
+    setTimeout(() => {
+      /* Phase 2 — swap pages */
+      pages[cur].classList.remove('active', 'entering');
+      pages[next].classList.remove('entering');
+      void pages[next].offsetWidth; /* force reflow before re-adding class */
+      pages[next].classList.add('active');
+      cur = next;
+      syncChrome();
+
+      /* Tiny pause so curtain holds, then open */
+      setTimeout(() => {
+        /* Phase 3 — curtain opens (wipes UP from top) */
+        curtain.style.transition = 'transform 0.48s cubic-bezier(0.76, 0, 0.24, 1)';
+        curtain.style.transformOrigin = 'top';
+        curtain.style.transform = 'scaleY(0)';
+
+        /* Phase 4 — stagger content in */
+        setTimeout(() => {
+          pages[cur].classList.add('entering');
+          busy = false;
+        }, 80);
+
+      }, 60);
+
+    }, 440);
+  }
+
+  /* ── Form submit ─────────────────────────────────────────── */
+  function handleSubmit(e) {
+    e.preventDefault();
+    /* TODO: wire up to backend / email service */
+    go(1);
+  }
+
+  /* ── Keyboard ────────────────────────────────────────────── */
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown')  go(1);
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')    go(-1);
+    if (e.key === 'Enter' && cur !== 2) go(1); /* not on form page */
+  });
+
+  /* ── Touch / swipe ───────────────────────────────────────── */
+  let tx = 0;
+  document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; },   { passive: true });
+  document.addEventListener('touchend',   e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 55) go(dx < 0 ? 1 : -1);
+  }, { passive: true });
+
+  /* ── Init ────────────────────────────────────────────────── */
+  syncChrome();
+</script>
+</body>
+</html>
