@@ -17,8 +17,8 @@ function syncChrome() {
   counter.textContent = `${pad(cur)} / ${pad(N - 1)}`;
   progFill.style.width = `${((cur + 1) / N) * 100}%`;
   btnBack.disabled = cur === 0;
-  /* On form page: hide forward (user must submit); on last page: hide both nav */
-  btnFwd.style.display  = (cur === N - 1) ? 'none' : 'flex';
+  /* On form page: hide forward (submit only); on last page: hide both nav */
+  btnFwd.style.display  = (cur === N - 1 || cur === N - 2) ? 'none' : 'flex';
   btnBack.style.display = (cur === N - 1) ? 'none' : 'flex';
 }
 
