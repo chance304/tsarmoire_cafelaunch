@@ -136,6 +136,19 @@ html, body {
 
 .page.active { opacity: 1; pointer-events: all; }
 
+/* Form page: scroll instead of clip, anchor to top */
+#p2 {
+  justify-content: flex-start;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 100px;
+}
+#p2::-webkit-scrollbar { display: none; }
+#p2 .tag  { margin-bottom: 14px; }
+#p2 .rule { margin-bottom: 20px; }
+
 /* ── Page element atoms ──────────────────────────────────── */
 .tag {
   font-family: 'Poppins', sans-serif;
@@ -204,9 +217,13 @@ html, body {
 }
 
 /* ── Form ────────────────────────────────────────────────── */
-.form-wrap { width: 100%; max-width: 390px; margin-top: 4px; }
+.form-wrap { width: 100%; max-width: 420px; margin-top: 4px; }
 
-.field { margin-bottom: 34px; }
+/* Side-by-side social handle fields on wide screens */
+.form-row { display: flex; gap: 32px; }
+.form-row .field { flex: 1; }
+
+.field { margin-bottom: 30px; }
 
 .field label {
   display: block;
@@ -321,6 +338,7 @@ html, body {
   #counter  { right: max(72px, env(safe-area-inset-right) + 16px); }
   #nav      { right: max(72px, env(safe-area-inset-right) + 16px); }
   .body     { max-width: 520px; font-size: 15px; }
+  .form-wrap { max-width: 580px; }
 }
 
 @media (max-width: 600px) {
@@ -332,8 +350,9 @@ html, body {
     bottom: max(36px, env(safe-area-inset-bottom) + 12px);
   }
   .ghost    { font-size: clamp(60px, 20vw, 100px); right: 8px; bottom: 40px; }
-  .field    { margin-bottom: 26px; }
-  .form-cta { padding: 18px 34px; }
+  .field    { margin-bottom: 22px; }
+  .form-row { flex-direction: column; gap: 0; }
+  .form-cta { padding: 18px 34px; width: 100%; }
 }
 
 @media (max-width: 360px) {
@@ -347,9 +366,10 @@ html, body {
 @media (max-height: 500px) {
   .page     { padding: 50px clamp(28px, 5vw, 52px) 50px; justify-content: flex-start; padding-top: 60px; }
   .tag      { margin-bottom: 10px; }
-  .rule     { margin-bottom: 16px; }
-  .headline { font-size: clamp(32px, 6vh, 56px); margin-bottom: 14px; }
-  .body     { line-height: 1.7; font-size: 13px; margin-bottom: 10px; }
-  .field    { margin-bottom: 20px; }
+  .rule     { margin-bottom: 14px; }
+  .headline { font-size: clamp(32px, 6vh, 56px); margin-bottom: 10px; }
+  .body     { line-height: 1.6; font-size: 12px; margin-bottom: 8px; }
+  .field    { margin-bottom: 14px; }
+  #p2       { padding-bottom: 80px; }
   .ghost    { display: none; }
 }
