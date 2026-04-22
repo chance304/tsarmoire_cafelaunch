@@ -53,9 +53,11 @@ Current deployment is on a **personal account** pending migration to the T's Arm
 
 ## Design tokens
 
-- Background: `#0d0b08` (near-black warm)
-- Accent gold: `rgba(197, 163, 105, …)` — used for tags, rules, progress bar, and hover states
-- Fonts: Cormorant Garamond (headlines) + Montserrat (UI/body), both from Google Fonts
+- Background: `#f6f4f0` (off-white warm — matches tsarmoire.com)
+- Primary text: `#151514` (near-black warm)
+- Accent (decorative): `#Daccb4` (warm tan — rules, progress bar)
+- Accent (text/focus): `#96815c` / `#baac8a` (darker earth tones for readability)
+- Font: Poppins (200/300/400/500 + italic 300) — matches tsarmoire.com
 
 ## Known TODOs
 

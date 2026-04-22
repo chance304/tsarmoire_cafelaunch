@@ -3,28 +3,27 @@
 html, body {
   height: 100%; width: 100%;
   overflow-x: hidden;
-  background: #0d0b08;
+  background: #f6f4f0;
 }
 
 /* ═══════════════════════════════════════════════════════════
    BACKGROUND — PLACEHOLDER FOR DESIGN TEAM
    Replace the gradient below with the confirmed image:
    background: url('your-image.jpg') center/cover no-repeat;
-   Add a dark overlay if needed for text legibility.
+   Add a light overlay if needed for text legibility.
 ═══════════════════════════════════════════════════════════ */
 #bg {
   position: fixed; inset: 0; z-index: 0;
   background:
-    radial-gradient(ellipse at 75% 10%, rgba(100, 68, 38, 0.45) 0%, transparent 55%),
-    radial-gradient(ellipse at 15% 90%, rgba(80, 50, 28, 0.35) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 50%, rgba(40, 28, 16, 0.6) 0%, transparent 80%),
-    linear-gradient(170deg, #0d0b08 0%, #1c1308 20%, #281a0d 45%, #1e1409 70%, #0d0b08 100%);
+    radial-gradient(ellipse at 75% 10%, rgba(218,204,180,0.4) 0%, transparent 55%),
+    radial-gradient(ellipse at 15% 90%, rgba(186,172,138,0.25) 0%, transparent 50%),
+    linear-gradient(170deg, #f6f4f0 0%, #f0ebe2 30%, #ede7dc 60%, #f6f4f0 100%);
   animation: breathe 18s ease-in-out infinite alternate;
 }
 
 @keyframes breathe {
   0%   { filter: brightness(1) saturate(1); }
-  100% { filter: brightness(1.1) saturate(1.12); }
+  100% { filter: brightness(1.02) saturate(1.06); }
 }
 
 /* Grain / film texture */
@@ -32,7 +31,7 @@ html, body {
   position: fixed; inset: -150px; z-index: 1;
   width: calc(100% + 300px); height: calc(100% + 300px);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
-  opacity: 0.038;
+  opacity: 0.028;
   pointer-events: none;
   will-change: transform;
   animation: grainShift 0.4s steps(3) infinite;
@@ -48,7 +47,7 @@ html, body {
 /* ── Transition curtain ─────────────────────────────────── */
 #curtain {
   position: fixed; inset: 0; z-index: 500;
-  background: #0d0b08;
+  background: #f6f4f0;
   transform: scaleY(0);
   transform-origin: bottom;
   pointer-events: none;
@@ -60,10 +59,10 @@ html, body {
   top: max(36px, env(safe-area-inset-top) + 12px);
   left: max(52px, env(safe-area-inset-left) + 16px);
   z-index: 50;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: 300; font-size: 9.5px;
   letter-spacing: 0.5em;
-  color: rgba(255,255,255,0.38);
+  color: rgba(21,20,20,0.4);
   text-transform: uppercase;
   user-select: none;
 }
@@ -73,22 +72,22 @@ html, body {
   top: max(40px, env(safe-area-inset-top) + 12px);
   right: max(52px, env(safe-area-inset-right) + 16px);
   z-index: 50;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: 200; font-size: 11px;
   letter-spacing: 0.18em;
-  color: rgba(255,255,255,0.22);
+  color: rgba(21,20,20,0.28);
   transition: opacity 0.4s;
 }
 
 /* Bottom progress line */
 #prog-track {
   position: fixed; bottom: env(safe-area-inset-bottom); left: 0; right: 0;
-  height: 1px; background: rgba(255,255,255,0.07);
+  height: 1px; background: rgba(21,20,20,0.1);
   z-index: 50;
 }
 #prog-fill {
   height: 100%;
-  background: linear-gradient(90deg, rgba(197,163,105,0.5), rgba(220,190,140,0.8));
+  background: linear-gradient(90deg, #baac8a, #Daccb4);
   transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
   width: 25%;
 }
@@ -104,20 +103,20 @@ html, body {
 
 .nav-btn {
   width: 50px; height: 50px;
-  border: 1px solid rgba(255,255,255,0.16);
+  border: 1px solid rgba(21,20,20,0.16);
   background: transparent;
-  color: rgba(255,255,255,0.75);
+  color: rgba(21,20,20,0.65);
   cursor: pointer;
   font-size: 15px;
   display: flex; align-items: center; justify-content: center;
   transition: background 0.3s, border-color 0.3s, color 0.3s, opacity 0.3s;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Poppins', sans-serif;
   -webkit-tap-highlight-color: transparent;
 }
 .nav-btn:hover:not(:disabled) {
-  background: rgba(255,255,255,0.07);
-  border-color: rgba(197,163,105,0.5);
-  color: white;
+  background: rgba(21,20,20,0.04);
+  border-color: #baac8a;
+  color: #151514;
 }
 .nav-btn:disabled { opacity: 0.15; cursor: default; }
 
@@ -139,25 +138,25 @@ html, body {
 
 /* ── Page element atoms ──────────────────────────────────── */
 .tag {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: 300; font-size: 9.5px;
   letter-spacing: 0.5em;
-  color: rgba(197,163,105,0.75);
+  color: #96815c;
   text-transform: uppercase;
   margin-bottom: 24px;
 }
 
 .rule {
   width: 32px; height: 1px;
-  background: rgba(197,163,105,0.45);
+  background: #Daccb4;
   margin-bottom: 42px;
 }
 
 .headline {
-  font-family: 'Cormorant Garamond', 'Georgia', serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: 300;
   font-size: clamp(54px, 9.5vw, 100px);
-  color: rgba(250,247,241,0.96);
+  color: #151514;
   line-height: 1.02;
   letter-spacing: -0.015em;
   margin-bottom: 38px;
@@ -165,14 +164,14 @@ html, body {
 
 .headline em {
   font-style: italic;
-  color: rgba(250,247,241,0.65);
+  color: rgba(21,20,20,0.45);
 }
 
 .body {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: 300;
   font-size: clamp(13px, 1.35vw, 14.5px);
-  color: rgba(255,255,255,0.58);
+  color: rgba(21,20,20,0.6);
   line-height: 2.05;
   max-width: min(430px, 100%);
   margin-bottom: 14px;
@@ -180,14 +179,14 @@ html, body {
 
 .body strong {
   font-weight: 400;
-  color: rgba(255,255,255,0.83);
+  color: #151514;
 }
 
 .caption {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: 200; font-size: 10px;
   letter-spacing: 0.3em;
-  color: rgba(255,255,255,0.28);
+  color: rgba(21,20,20,0.35);
   text-transform: uppercase;
   margin-top: 20px;
 }
@@ -196,10 +195,10 @@ html, body {
 .ghost {
   position: absolute;
   right: 40px; bottom: 50px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Poppins', sans-serif;
   font-style: italic; font-weight: 300;
   font-size: clamp(100px, 18vw, 190px);
-  color: rgba(255,255,255,0.03);
+  color: rgba(21,20,20,0.04);
   line-height: 1; letter-spacing: -0.02em;
   pointer-events: none; user-select: none;
 }
@@ -211,10 +210,10 @@ html, body {
 
 .field label {
   display: block;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: 300; font-size: 9.5px;
   letter-spacing: 0.38em;
-  color: rgba(255,255,255,0.32);
+  color: rgba(21,20,20,0.45);
   text-transform: uppercase;
   margin-bottom: 10px;
 }
@@ -222,10 +221,10 @@ html, body {
 .field input {
   width: 100%; background: none;
   border: none;
-  border-bottom: 1px solid rgba(255,255,255,0.16);
-  color: rgba(255,255,255,0.92);
-  font-family: 'Cormorant Garamond', 'Georgia', serif;
-  font-size: 22px; font-weight: 300;
+  border-bottom: 1px solid rgba(21,20,20,0.18);
+  color: #151514;
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px; font-weight: 300;
   padding: 4px 0 10px;
   outline: none;
   transition: border-color 0.4s;
@@ -233,15 +232,15 @@ html, body {
 }
 
 .field input:focus {
-  border-bottom-color: rgba(197,163,105,0.65);
+  border-bottom-color: #96815c;
 }
 
-.field input::placeholder { color: rgba(255,255,255,0.1); }
+.field input::placeholder { color: rgba(21,20,20,0.2); }
 
 .field input:-webkit-autofill,
 .field input:-webkit-autofill:focus {
-  -webkit-box-shadow: 0 0 0 60px #1c1308 inset !important;
-  -webkit-text-fill-color: rgba(255,255,255,0.92) !important;
+  -webkit-box-shadow: 0 0 0 60px #f6f4f0 inset !important;
+  -webkit-text-fill-color: #151514 !important;
   transition: background-color 9999s;
 }
 
@@ -249,9 +248,9 @@ html, body {
   margin-top: 8px;
   padding: 15px 34px;
   background: transparent;
-  border: 1px solid rgba(255,255,255,0.28);
-  color: rgba(255,255,255,0.8);
-  font-family: 'Montserrat', sans-serif;
+  border: 1px solid rgba(21,20,20,0.22);
+  color: rgba(21,20,20,0.75);
+  font-family: 'Poppins', sans-serif;
   font-weight: 300; font-size: 9.5px;
   letter-spacing: 0.42em;
   text-transform: uppercase;
@@ -261,9 +260,9 @@ html, body {
 }
 
 .form-cta:hover {
-  background: rgba(197,163,105,0.08);
-  border-color: rgba(197,163,105,0.55);
-  color: white;
+  background: rgba(186,172,138,0.12);
+  border-color: #baac8a;
+  color: #151514;
 }
 
 .form-cta:disabled {
@@ -274,16 +273,16 @@ html, body {
 
 .field-error {
   display: none;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 9px;
   letter-spacing: 0.22em;
-  color: rgba(210, 95, 65, 0.9);
+  color: rgba(180, 60, 40, 0.85);
   text-transform: uppercase;
   margin-top: 8px;
 }
 
 .field.invalid .field-error  { display: block; }
-.field.invalid input         { border-bottom-color: rgba(210, 95, 65, 0.55); }
+.field.invalid input         { border-bottom-color: rgba(180, 60, 40, 0.45); }
 
 /* ── Stagger-in animation system ────────────────────────── */
 .s {
