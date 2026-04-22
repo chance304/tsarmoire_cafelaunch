@@ -51,6 +51,17 @@ See `DEPLOYMENT.md` for the full Apps Script setup.
 | Headline font | Cormorant Garamond (300/400) |
 | UI font | Montserrat (200/300/400/500) |
 
+## Form fields collected
+
+| Field | Required | Notes |
+|---|---|---|
+| Full Name | Yes | |
+| Email Address | Yes | Used for confirmation email + duplicate check |
+| Instagram Handle | No | |
+| TikTok Handle | No | |
+| Phone Number | No | |
+
 ## Known TODOs
 
 - `#bg` in `style.css` has a placeholder comment — replace gradient with confirmed photo once design team provides it
+- `SCRIPT_URL` in `assets/app.js` points to a personal account deployment — redeploy from org account per `DEPLOYMENT.md` and update the URL

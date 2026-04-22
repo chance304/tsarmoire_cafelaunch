@@ -18,10 +18,10 @@ function _appendRow(d) {
   let sheet = ss.getSheetByName(SHEET_NAME);
   if (!sheet) {
     sheet = ss.insertSheet(SHEET_NAME);
-    sheet.appendRow(['ID', 'Name', 'Email', 'Instagram', 'Registered At']);
+    sheet.appendRow(['ID', 'Name', 'Email', 'Instagram', 'TikTok', 'Phone', 'Registered At']);
     sheet.setFrozenRows(1);
   }
-  sheet.appendRow([d.id, d.name, d.email, d.instagram || '', d.registered_at]);
+  sheet.appendRow([d.id, d.name, d.email, d.instagram || '', d.tiktok || '', d.phone || '', d.registered_at]);
 }
 
 function _sendConfirmation(d) {

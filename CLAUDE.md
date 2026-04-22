@@ -48,6 +48,9 @@ See `DEPLOYMENT.md` for setup and re-deploy instructions.
 
 Current deployment is on a **personal account** pending migration to the T's Armoire org account — update `SCRIPT_URL` in `assets/app.js` after the org deployment is complete.
 
+**Fields collected:** name, email, instagram, tiktok, phone, registered_at  
+**Sheet columns:** ID · Name · Email · Instagram · TikTok · Phone · Registered At
+
 ## Design tokens
 
 - Background: `#0d0b08` (near-black warm)

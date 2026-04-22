@@ -92,9 +92,11 @@ document.getElementById('f-email').addEventListener('input', () =>
 function handleSubmit(e) {
   e.preventDefault();
 
-  const nameVal  = document.getElementById('f-name').value.trim();
-  const emailVal = document.getElementById('f-email').value.trim();
-  const igVal    = document.getElementById('f-ig').value.trim();
+  const nameVal   = document.getElementById('f-name').value.trim();
+  const emailVal  = document.getElementById('f-email').value.trim();
+  const igVal     = document.getElementById('f-ig').value.trim();
+  const tiktokVal = document.getElementById('f-tiktok').value.trim();
+  const phoneVal  = document.getElementById('f-phone').value.trim();
 
   const fieldName  = document.getElementById('field-name');
   const fieldEmail = document.getElementById('field-email');
@@ -139,7 +141,9 @@ function handleSubmit(e) {
     id:            'tsa-' + Date.now(),
     name:          nameVal,
     email:         emailVal,
-    instagram:     igVal || null,
+    instagram:     igVal     || null,
+    tiktok:        tiktokVal || null,
+    phone:         phoneVal  || null,
     registered_at: new Date().toISOString()
   };
 

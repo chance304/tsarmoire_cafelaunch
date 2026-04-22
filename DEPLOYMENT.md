@@ -18,6 +18,10 @@ This must be done from the **T's Armoire Google account**, not a personal accoun
 2. Create a new spreadsheet, name it: `TSA CAFE Registrations`
 3. Leave it empty — the script creates the header row automatically on first submission
 
+The sheet will have the following columns once the first submission arrives:
+
+| ID | Name | Email | Instagram | TikTok | Phone | Registered At |
+
 ### Step 2 — Create the Apps Script project
 
 1. In the spreadsheet, click **Extensions → Apps Script**
@@ -69,6 +73,16 @@ If you edit `apps-script/Code.gs`, you must create a **new deployment** for chan
 
 > You can also manage existing deployments via **Deploy → Manage deployments** and create a new version under the same deployment to avoid changing the URL.
 
+### If migrating an existing Sheet (e.g. from a personal account)
+
+If rows were already collected under a previous deployment, the old sheet will be missing the `TikTok` and `Phone` columns. Before going live on the org account:
+
+1. Open the existing sheet
+2. Insert two columns between `Instagram` and `Registered At`
+3. Name them `TikTok` and `Phone` (must match exactly)
+
+New submissions will populate those columns. Old rows will simply have empty cells there.
+
 ---
 
 ## 3. GitHub Pages (frontend)
@@ -86,8 +100,10 @@ Every `git push origin main` deploys automatically. Changes are live within ~30 
 
 After deploying a new Apps Script URL:
 
-- [ ] Open the live site and submit the form with a test email
-- [ ] Confirm a new row appears in the Google Sheet
+- [ ] Open the live site and navigate to the registration form (page 3)
+- [ ] Submit the form with all fields filled in — name, email, Instagram, TikTok, and phone
+- [ ] Confirm a new row appears in the Google Sheet with all 7 columns populated
 - [ ] Confirm the test email inbox receives the confirmation email
+- [ ] Submit again leaving TikTok and phone blank — sheet should show empty cells for those columns, not an error
 - [ ] Submit again with the same email — form should block with "Already registered"
 - [ ] Test on mobile (form page should not advance via swipe — only via submit)
