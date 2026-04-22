@@ -175,12 +175,17 @@ document.addEventListener('keydown', e => {
 });
 
 /* ── Touch / swipe ───────────────────────────────────────── */
-let tx = 0;
-document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; },   { passive: true });
-document.addEventListener('touchend',   e => {
+let tx = 0, ty = 0;
+document.addEventListener('touchstart', e => {
+  tx = e.touches[0].clientX;
+  ty = e.touches[0].clientY;
+}, { passive: true });
+document.addEventListener('touchend', e => {
+  if (cur === 2) return; /* form page: let native scroll handle all touch */
   const dx = e.changedTouches[0].clientX - tx;
-  if (Math.abs(dx) > 55) {
-    if (cur === 2 && dx < 0) return; /* must submit form to advance */
+  const dy = e.changedTouches[0].clientY - ty;
+  /* only fire if gesture is clearly horizontal, not a scroll attempt */
+  if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy) * 1.5) {
     go(dx < 0 ? 1 : -1);
   }
 }, { passive: true });

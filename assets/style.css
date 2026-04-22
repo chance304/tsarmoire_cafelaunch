@@ -139,10 +139,11 @@ html, body {
 /* Form page: scroll instead of clip, anchor to top */
 #p2 {
   justify-content: flex-start;
-  overflow-y: auto;
+  overflow-y: scroll;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  touch-action: pan-y;
   padding-bottom: 100px;
 }
 #p2::-webkit-scrollbar { display: none; }
