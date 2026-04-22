@@ -136,19 +136,28 @@ html, body {
 
 .page.active { opacity: 1; pointer-events: all; }
 
-/* Form page: scroll instead of clip, anchor to top */
-#p2 {
-  justify-content: flex-start;
+/* Form page: flex-start so .p2-scroll fills remaining height */
+#p2 { justify-content: flex-start; }
+
+/*
+  Inner scroll container. The flex: 1 + min-height: 0 pattern is
+  required — without min-height: 0 the flex item refuses to shrink
+  below its content size and overflow/scroll never activates.
+*/
+.p2-scroll {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
   touch-action: pan-y;
-  padding-bottom: 100px;
+  scrollbar-width: none;
+  padding-bottom: 24px;
 }
-#p2::-webkit-scrollbar { display: none; }
-#p2 .tag  { margin-bottom: 14px; }
-#p2 .rule { margin-bottom: 20px; }
+.p2-scroll::-webkit-scrollbar { display: none; }
+.p2-scroll .tag  { margin-bottom: 14px; }
+.p2-scroll .rule { margin-bottom: 20px; }
 
 /* ── Page element atoms ──────────────────────────────────── */
 .tag {
@@ -370,7 +379,7 @@ html, body {
   .rule     { margin-bottom: 14px; }
   .headline { font-size: clamp(32px, 6vh, 56px); margin-bottom: 10px; }
   .body     { line-height: 1.6; font-size: 12px; margin-bottom: 8px; }
-  .field    { margin-bottom: 14px; }
-  #p2       { padding-bottom: 80px; }
-  .ghost    { display: none; }
+  .field      { margin-bottom: 14px; }
+  .p2-scroll  { padding-bottom: 12px; }
+  .ghost      { display: none; }
 }
