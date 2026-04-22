@@ -62,6 +62,7 @@ function go(dir) {
       /* Phase 4 — stagger content in */
       setTimeout(() => {
         pages[cur].classList.add('entering');
+        if (window.gtag) gtag('event', 'page_view', { page_path: '/page-' + (cur + 1) });
         busy = false;
       }, 80);
 
@@ -147,24 +148,36 @@ function handleSubmit(e) {
     registered_at: new Date().toISOString()
   };
 
-  /* Persist */
-  existing.push(entry);
-  localStorage.setItem(STORE_KEY, JSON.stringify(existing));
-
-  /* POST to Google Apps Script — fire and forget */
+  /* POST to Google Apps Script — wait for confirmed response */
   fetch(SCRIPT_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'text/plain' },
     body: JSON.stringify(entry),
-    mode: 'no-cors'
-  }).catch(() => {});
-
-  /* Navigate to thank-you after brief pause */
-  setTimeout(() => {
+    mode: 'cors'
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.ok) {
+      /* Persist only after server confirms */
+      existing.push(entry);
+      localStorage.setItem(STORE_KEY, JSON.stringify(existing));
+      if (window.gtag) gtag('event', 'registration_complete', { event_category: 'engagement' });
+      go(1);
+    } else if (data.error === 'duplicate') {
+      setFieldError(fieldEmail, errEmail, 'Already registered with this email');
+      existing.push(entry); /* block re-submit from same browser */
+      localStorage.setItem(STORE_KEY, JSON.stringify(existing));
+      btn.textContent = 'Register Interest →';
+      btn.disabled = false;
+    } else {
+      throw new Error(data.error || 'server_error');
+    }
+  })
+  .catch(() => {
+    setFieldError(fieldEmail, errEmail, 'Something went wrong — please try again');
     btn.textContent = 'Register Interest →';
     btn.disabled = false;
-    go(1);
-  }, 500);
+  });
 }
 
 /* ── Keyboard ────────────────────────────────────────────── */

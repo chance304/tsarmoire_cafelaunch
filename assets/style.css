@@ -209,7 +209,7 @@ html, body {
   font-family: 'Poppins', sans-serif;
   font-weight: 200; font-size: 10px;
   letter-spacing: 0.3em;
-  color: rgba(21,20,20,0.35);
+  color: rgba(21,20,20,0.55);
   text-transform: uppercase;
   margin-top: 20px;
 }
@@ -310,6 +310,17 @@ html, body {
 
 .field.invalid .field-error  { display: block; }
 .field.invalid input         { border-bottom-color: rgba(180, 60, 40, 0.45); }
+
+.form-privacy {
+  margin-top: 18px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 300;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: rgba(21,20,20,0.38);
+  line-height: 1.6;
+  max-width: 340px;
+}
 
 /* ── Stagger-in animation system ────────────────────────── */
 .s {

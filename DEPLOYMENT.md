@@ -96,14 +96,28 @@ Every `git push origin main` deploys automatically. Changes are live within ~30 
 
 ---
 
+## 4. Post-deploy — remaining team tasks
+
+Before the site goes live:
+
+- [ ] Replace `og:image` in `index.html` with the confirmed event photo (currently placeholder path `assets/og-image.jpg`)
+- [ ] Replace `#bg` gradient in `assets/style.css` with the confirmed background image from design team
+- [ ] Replace `GA_MEASUREMENT_ID` in `index.html` with the real Google Analytics property ID
+- [ ] Write and link privacy policy page (required — site collects email and phone)
+
+---
+
 ## Verification checklist
 
 After deploying a new Apps Script URL:
 
 - [ ] Open the live site and navigate to the registration form (page 3)
-- [ ] Submit the form with all fields filled in — name, email, Instagram, TikTok, and phone
+- [ ] Submit the form with all fields filled — confirm the form waits for a server response before advancing to the thank-you page
 - [ ] Confirm a new row appears in the Google Sheet with all 7 columns populated
 - [ ] Confirm the test email inbox receives the confirmation email
-- [ ] Submit again leaving TikTok and phone blank — sheet should show empty cells for those columns, not an error
-- [ ] Submit again with the same email — form should block with "Already registered"
-- [ ] Test on mobile (form page should not advance via swipe — only via submit)
+- [ ] Submit the same email again — server should return `duplicate` error; form should show "Already registered" inline
+- [ ] Kill your network mid-submit — form should show "Something went wrong — please try again" and re-enable the button
+- [ ] Submit leaving TikTok and phone blank — sheet should show empty cells, no error
+- [ ] Test on mobile — form scrolls, button is reachable, no swipe navigation on form page
+- [ ] Check the `Errors` tab in the Google Sheet exists and logs any backend failures
+- [ ] Confirm no submissions exceed the rate limit (15 per minute window)

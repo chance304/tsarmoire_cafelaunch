@@ -4,7 +4,45 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>TSA CAFE — May 12</title>
+
+  <!-- SEO -->
+  <meta name="description" content="Join us for an intimate breakfast experience on May 12. Register your interest for TSA CAFE — an exclusive pre-launch event by T's Armoire.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://launch.tsarmoiremanufacturing.com.np">
+  <meta name="theme-color" content="#f6f4f0">
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website">
+  <meta property="og:url"         content="https://launch.tsarmoiremanufacturing.com.np">
+  <meta property="og:title"       content="TSA CAFE — May 12">
+  <meta property="og:description" content="An intimate breakfast experience before the launch. Register your interest for this exclusive event by T's Armoire.">
+  <!-- og:image: replace with confirmed event image before launch -->
+  <meta property="og:image"       content="https://launch.tsarmoiremanufacturing.com.np/assets/og-image.jpg">
+  <meta property="og:site_name"   content="T's Armoire">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:title"       content="TSA CAFE — May 12">
+  <meta name="twitter:description" content="An intimate breakfast experience before the launch. Register your interest for this exclusive event by T's Armoire.">
+  <meta name="twitter:image"       content="https://launch.tsarmoiremanufacturing.com.np/assets/og-image.jpg">
+
+  <!-- Favicon (placeholder — replace with brand asset) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect fill='%23Daccb4' width='32' height='32'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Georgia%2C serif' font-size='18' fill='%23151514'%3ET%3C/text%3E%3C/svg%3E">
+
+  <!-- Google Analytics (replace GA_MEASUREMENT_ID with your property ID) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'GA_MEASUREMENT_ID');
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
@@ -18,12 +56,12 @@
 
 <!-- Chrome -->
 <div id="wordmark">T's Armoire</div>
-<div id="counter">01 / 04</div>
+<div id="counter" aria-live="polite" aria-atomic="true">01 / 04</div>
 <div id="prog-track"><div id="prog-fill"></div></div>
-<div id="nav">
-  <button class="nav-btn" id="btn-back" onclick="go(-1)" disabled>←</button>
-  <button class="nav-btn" id="btn-fwd"  onclick="go(1)">→</button>
-</div>
+<nav id="nav" role="navigation" aria-label="Page navigation">
+  <button class="nav-btn" id="btn-back" onclick="go(-1)" disabled aria-label="Go back">←</button>
+  <button class="nav-btn" id="btn-fwd"  onclick="go(1)" aria-label="Go forward">→</button>
+</nav>
 
 <!-- ═══════════ PAGES ═══════════ -->
 <div id="stage">
@@ -85,6 +123,7 @@
         <input id="f-phone" type="tel" placeholder="+1 (555) 000-0000" autocomplete="tel">
       </div>
       <button type="submit" class="form-cta" id="rsvp-btn">Register Interest →</button>
+      <p class="form-privacy">Your information is used only to process your registration and is not shared with third parties.</p>
     </form>
     </div><!-- /.p2-scroll -->
     <div class="ghost">03</div>
