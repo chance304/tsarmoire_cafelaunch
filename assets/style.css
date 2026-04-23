@@ -62,7 +62,7 @@ html, body {
   top: max(36px, env(safe-area-inset-top) + 12px);
   left: max(52px, env(safe-area-inset-left) + 16px);
   z-index: 50;
-  font-family: 'winsoft-pro', sans-serif;
+  font-family: 'Jost', sans-serif;
   font-weight: 300; font-size: 9.5px;
   letter-spacing: 0.5em;
   color: rgba(21,20,20,0.65);
@@ -75,7 +75,7 @@ html, body {
   top: max(40px, env(safe-area-inset-top) + 12px);
   right: max(52px, env(safe-area-inset-right) + 16px);
   z-index: 50;
-  font-family: 'winsoft-pro', sans-serif;
+  font-family: 'Jost', sans-serif;
   font-weight: 200; font-size: 11px;
   letter-spacing: 0.18em;
   color: rgba(21,20,20,0.55);
@@ -113,7 +113,7 @@ html, body {
   font-size: 15px;
   display: flex; align-items: center; justify-content: center;
   transition: background 0.3s, border-color 0.3s, color 0.3s, opacity 0.3s;
-  font-family: 'winsoft-pro', sans-serif;
+  font-family: 'Jost', sans-serif;
   -webkit-tap-highlight-color: transparent;
 }
 .nav-btn:hover:not(:disabled) {
@@ -153,7 +153,7 @@ html, body {
 
 /* ── Page element atoms ──────────────────────────────────── */
 .tag {
-  font-family: 'winsoft-pro', sans-serif;
+  font-family: 'Jost', sans-serif;
   font-weight: 300; font-size: 9.5px;
   letter-spacing: 0.5em;
   color: #96815c;
@@ -168,7 +168,7 @@ html, body {
 }
 
 .headline {
-  font-family: 'winsoft-pro', sans-serif;
+  font-family: 'Jost', sans-serif;
   font-weight: 300;
   font-size: clamp(54px, 9.5vw, 100px);
   color: #151514;
@@ -183,7 +183,7 @@ html, body {
 }
 
 .body {
-  font-family: 'winsoft-pro', sans-serif;
+  font-family: 'Jost', sans-serif;
   font-weight: 300;
   font-size: clamp(13px, 1.35vw, 14.5px);
   color: rgba(21,20,20,0.82);
@@ -198,7 +198,7 @@ html, body {
 }
 
 .caption {
-  font-family: 'winsoft-pro', sans-serif;
+  font-family: 'Jost', sans-serif;
   font-weight: 200; font-size: 10px;
   letter-spacing: 0.3em;
   color: rgba(21,20,20,0.78);
@@ -210,7 +210,7 @@ html, body {
 .ghost {
   position: absolute;
   right: 40px; bottom: 50px;
-  font-family: 'winsoft-pro', sans-serif;
+  font-family: 'Jost', sans-serif;
   font-style: italic; font-weight: 300;
   font-size: clamp(100px, 18vw, 190px);
   color: rgba(21,20,20,0.04);
@@ -229,7 +229,7 @@ html, body {
 
 .field label {
   display: block;
-  font-family: 'winsoft-pro', sans-serif;
+  font-family: 'Jost', sans-serif;
   font-weight: 300; font-size: 9.5px;
   letter-spacing: 0.38em;
   color: rgba(21,20,20,0.72);
@@ -242,7 +242,7 @@ html, body {
   border: none;
   border-bottom: 1px solid rgba(21,20,20,0.42);
   color: #151514;
-  font-family: 'winsoft-pro', sans-serif;
+  font-family: 'Jost', sans-serif;
   font-size: 20px; font-weight: 300;
   padding: 4px 0 10px;
   outline: none;
@@ -269,7 +269,7 @@ html, body {
   background: transparent;
   border: 1px solid rgba(21,20,20,0.52);
   color: #151514;
-  font-family: 'winsoft-pro', sans-serif;
+  font-family: 'Jost', sans-serif;
   font-weight: 300; font-size: 9.5px;
   letter-spacing: 0.42em;
   text-transform: uppercase;
@@ -292,7 +292,7 @@ html, body {
 
 .field-error {
   display: none;
-  font-family: 'winsoft-pro', sans-serif;
+  font-family: 'Jost', sans-serif;
   font-size: 9px;
   letter-spacing: 0.22em;
   color: rgba(180, 60, 40, 0.85);
@@ -305,7 +305,7 @@ html, body {
 
 .form-privacy {
   margin-top: 18px;
-  font-family: 'winsoft-pro', sans-serif;
+  font-family: 'Jost', sans-serif;
   font-weight: 300;
   font-size: 10px;
   letter-spacing: 0.04em;
