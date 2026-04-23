@@ -354,23 +354,24 @@ html, body {
   margin-top: 28px;
   padding-top: 22px;
   border-top: 1px solid #Daccb4;
+  margin-bottom: 32px;
   font-family: 'Jost', sans-serif;
   font-weight: 300;
-  font-size: clamp(11px, 1.1vw, 12.5px);
-  color: rgba(21,20,20,0.72);
-  line-height: 1.85;
-  max-width: min(380px, 100%);
+  font-size: clamp(13px, 1.35vw, 15px);
+  color: rgba(21,20,20,0.82);
+  line-height: 1.9;
+  max-width: min(420px, 100%);
 }
 
 .fit-note-label {
   display: block;
   font-family: 'Jost', sans-serif;
   font-weight: 300;
-  font-size: 9px;
+  font-size: 10px;
   letter-spacing: 0.38em;
   text-transform: uppercase;
   color: #7a6948;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 /* ── Stagger-in animation system ────────────────────────── */
