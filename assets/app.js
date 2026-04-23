@@ -75,7 +75,12 @@ function go(dir) {
 /* ── Consent ─────────────────────────────────────────────── */
 function handleConsent(choice) {
   socialConsent = choice;
-  go(1);
+  /* If the enter-transition is still running, wait for it to finish */
+  if (busy) {
+    const wait = setInterval(() => { if (!busy) { clearInterval(wait); go(1); } }, 50);
+  } else {
+    go(1);
+  }
 }
 
 /* ── Registration ────────────────────────────────────────── */

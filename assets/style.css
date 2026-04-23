@@ -315,24 +315,28 @@ html, body {
 }
 
 /* ── Consent buttons ─────────────────────────────────────── */
-.consent-btns { display: flex; gap: 16px; margin-top: 10px; }
+.consent-btns { display: flex; gap: 20px; margin-top: 36px; }
 
 .consent-btn {
-  padding: 15px 34px;
+  height: 52px;
+  padding: 0 44px;
+  min-width: 120px;
   background: transparent;
-  border: 1px solid rgba(21,20,20,0.70);
+  border: 1px solid rgba(21,20,20,0.55);
   color: #151514;
   font-family: 'Jost', sans-serif;
-  font-weight: 300; font-size: 9.5px;
-  letter-spacing: 0.42em;
+  font-weight: 300; font-size: 11px;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   cursor: pointer;
-  transition: background 0.4s, border-color 0.4s;
+  transition: background 0.3s, border-color 0.3s, color 0.3s;
   -webkit-tap-highlight-color: transparent;
+  display: flex; align-items: center; justify-content: center;
 }
 .consent-btn:hover {
   background: rgba(186,172,138,0.12);
-  border-color: #baac8a;
+  border-color: #96815c;
+  color: #151514;
 }
 
 /* ── Stagger-in animation system ────────────────────────── */
@@ -387,8 +391,8 @@ html, body {
   .field    { margin-bottom: 22px; }
   .form-row { flex-direction: column; gap: 0; }
   .form-cta { padding: 18px 34px; width: 100%; }
-  .consent-btns { flex-direction: column; gap: 12px; }
-  .consent-btn  { width: 100%; padding: 18px 34px; }
+  .consent-btns { flex-direction: column; gap: 14px; }
+  .consent-btn  { width: 100%; min-width: unset; padding: 0 34px; }
   #bg {
     background:
       linear-gradient(
