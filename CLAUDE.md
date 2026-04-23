@@ -15,6 +15,7 @@ index.html              — markup only (no inline styles or scripts)
 assets/
   style.css             — all styles, design tokens, responsive breakpoints
   app.js                — SPA transitions, form validation, Apps Script POST
+  bg_info.jpeg          — confirmed background photo (TSA founder in studio, portrait)
 apps-script/
   Code.gs               — Google Apps Script backend (Sheet write + confirmation email)
 CNAME                   — GitHub Pages custom domain
@@ -33,12 +34,24 @@ python3 -m http.server 8080
 
 ## Architecture
 
-`index.html` is a 4-page single-page app with a curtain-wipe transition system:
+`index.html` is a **5-page** single-page app with a curtain-wipe transition system:
 
-- **Pages** (`#p0`–`#p3`): absolutely positioned, toggled via `.active` class
+- **Pages** (`#p0`–`#p4`): absolutely positioned, toggled via `.active` class
 - **Transitions**: CSS `scaleY` curtain (`#curtain`) with a 3-phase JS timer sequence in `go(dir)` — defined in `assets/app.js`
 - **Stagger animations**: `.entering` class triggers CSS `@keyframes sIn` with `nth-child` delays on `.s` elements — defined in `assets/style.css`
 - **Chrome**: wordmark, page counter, progress bar, and nav arrows update via `syncChrome()`
+
+### Page index
+
+| cur | ID  | Page | Nav behaviour |
+|-----|-----|------|---------------|
+| 0   | #p0 | Opening | forward arrow visible |
+| 1   | #p1 | The Experience | forward arrow visible |
+| 2   | #p2 | Social Consent | forward arrow hidden — Yes/No buttons only |
+| 3   | #p3 | Registration Form | forward arrow hidden — submit only; scrollable |
+| 4   | #p4 | Thank You | both nav arrows hidden |
+
+Keyboard (ArrowRight/Enter) and swipe navigation are disabled on pages 2 and 3.
 
 ## Backend
 
@@ -48,18 +61,25 @@ See `DEPLOYMENT.md` for setup and re-deploy instructions.
 
 Current deployment is on a **personal account** pending migration to the T's Armoire org account — update `SCRIPT_URL` in `assets/app.js` after the org deployment is complete.
 
-**Fields collected:** name, email, instagram, tiktok, phone, registered_at  
-**Sheet columns:** ID · Name · Email · Instagram · TikTok · Phone · Registered At
+**Fields sent in POST body:**
+
+```
+id, name, email, instagram, tiktok, phone, social_consent, registered_at
+```
+
+**Sheet columns:** ID · Name · Email · Instagram · TikTok · Phone · Registered At · Social Consent
 
 ## Design tokens
 
 - Background: `#f6f4f0` (off-white warm — matches tsarmoire.com)
+- Background image: `assets/bg_info.jpeg` — portrait photo, positioned `80% center` on desktop, `65% center` on mobile; layered warm gradient overlay for legibility
 - Primary text: `#151514` (near-black warm)
 - Accent (decorative): `#Daccb4` (warm tan — rules, progress bar)
-- Accent (text/focus): `#96815c` / `#baac8a` (darker earth tones for readability)
-- Font: Poppins (200/300/400/500 + italic 300) — matches tsarmoire.com
+- Accent (tags/focus): `#7a6948` / `#baac8a` (dark earth tones)
+- Font: **Jost** (200/300/400/500 + italic 300) via Google Fonts
 
 ## Known TODOs
 
-- `#bg` in `assets/style.css` has a placeholder comment — replace gradient with confirmed photo once design team provides it
 - `SCRIPT_URL` in `assets/app.js` points to a personal account deployment — redeploy from org account per `DEPLOYMENT.md` and update the URL
+- Replace `GA_MEASUREMENT_ID` in `index.html` with the real Google Analytics property ID
+- Replace `og:image` placeholder in `index.html` with the confirmed event photo

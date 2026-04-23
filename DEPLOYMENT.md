@@ -20,7 +20,7 @@ This must be done from the **T's Armoire Google account**, not a personal accoun
 
 The sheet will have the following columns once the first submission arrives:
 
-| ID | Name | Email | Instagram | TikTok | Phone | Registered At |
+| ID | Name | Email | Instagram | TikTok | Phone | Registered At | Social Consent |
 
 ### Step 2 — Create the Apps Script project
 
@@ -64,24 +64,35 @@ git push origin main
 
 ## 2. Re-deploying the Apps Script after code changes
 
-If you edit `apps-script/Code.gs`, you must create a **new deployment** for changes to take effect. Editing the script does not update existing deployments.
+If you edit `apps-script/Code.gs`, you must create a **new version** for changes to take effect. Editing the script does not update existing deployments.
 
 1. Open the Apps Script project
-2. Click **Deploy → New deployment**
-3. Copy the new URL
-4. Update `SCRIPT_URL` in `assets/app.js` and push
+2. Click **Deploy → Manage deployments**
+3. Click the edit (pencil) icon on the active deployment
+4. Under "Version", select **New version**
+5. Click **Deploy**
 
-> You can also manage existing deployments via **Deploy → Manage deployments** and create a new version under the same deployment to avoid changing the URL.
+> This updates the existing deployment URL — no need to change `SCRIPT_URL` in `app.js`.
 
-### If migrating an existing Sheet (e.g. from a personal account)
+### If adding the Social Consent column to an existing sheet
 
-If rows were already collected under a previous deployment, the old sheet will be missing the `TikTok` and `Phone` columns. Before going live on the org account:
+If the sheet already has rows from before the Social Consent column was added to `Code.gs`:
 
-1. Open the existing sheet
-2. Insert two columns between `Instagram` and `Registered At`
-3. Name them `TikTok` and `Phone` (must match exactly)
+1. Open the Google Sheet
+2. Click the header of column H and insert a column if needed
+3. Type `Social Consent` in cell H1
 
-New submissions will populate those columns. Old rows will simply have empty cells there.
+New submissions will populate column H. Old rows will have empty cells there.
+
+### If migrating from a previous deployment (e.g. personal → org account)
+
+If rows were already collected under a previous deployment, check that all column headers are present in row 1:
+
+```
+A: ID  B: Name  C: Email  D: Instagram  E: TikTok  F: Phone  G: Registered At  H: Social Consent
+```
+
+Missing columns will cause new submissions to write data to the wrong columns.
 
 ---
 
@@ -101,9 +112,9 @@ Every `git push origin main` deploys automatically. Changes are live within ~30 
 Before the site goes live:
 
 - [ ] Replace `og:image` in `index.html` with the confirmed event photo (currently placeholder path `assets/og-image.jpg`)
-- [ ] Replace `#bg` gradient in `assets/style.css` with the confirmed background image from design team
 - [ ] Replace `GA_MEASUREMENT_ID` in `index.html` with the real Google Analytics property ID
 - [ ] Write and link privacy policy page (required — site collects email and phone)
+- [ ] Migrate Apps Script deployment from personal account to T's Armoire org account and update `SCRIPT_URL` in `assets/app.js`
 
 ---
 
@@ -111,13 +122,14 @@ Before the site goes live:
 
 After deploying a new Apps Script URL:
 
-- [ ] Open the live site and navigate to the registration form (page 3)
-- [ ] Submit the form with all fields filled — confirm the form waits for a server response before advancing to the thank-you page
-- [ ] Confirm a new row appears in the Google Sheet with all 7 columns populated
+- [ ] Open the live site and navigate through all 5 pages (counter should read 01/05 → 05/05)
+- [ ] On page 3 (Social Consent), confirm Yes and No buttons advance to the form; back arrow returns to page 2
+- [ ] Submit the form (page 4) with all fields filled — confirm it waits for server response before advancing to thank-you
+- [ ] Confirm a new row appears in the Google Sheet with all 8 columns populated, including Social Consent as `yes` or `no`
 - [ ] Confirm the test email inbox receives the confirmation email
 - [ ] Submit the same email again — server should return `duplicate` error; form should show "Already registered" inline
 - [ ] Kill your network mid-submit — form should show "Something went wrong — please try again" and re-enable the button
 - [ ] Submit leaving TikTok and phone blank — sheet should show empty cells, no error
-- [ ] Test on mobile — form scrolls, button is reachable, no swipe navigation on form page
+- [ ] Test on mobile — form scrolls, button is reachable, no swipe navigation on consent or form pages
 - [ ] Check the `Errors` tab in the Google Sheet exists and logs any backend failures
 - [ ] Confirm no submissions exceed the rate limit (15 per minute window)
