@@ -144,6 +144,7 @@ html, body {
   -webkit-overflow-scrolling: touch;
   justify-content: flex-start;
   padding-top: clamp(70px, 12vh, 110px);
+  padding-bottom: max(110px, env(safe-area-inset-bottom) + 100px);
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
