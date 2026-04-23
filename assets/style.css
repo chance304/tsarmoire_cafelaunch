@@ -427,8 +427,8 @@ html, body {
   .field    { margin-bottom: 22px; }
   .form-row { flex-direction: column; gap: 0; }
   .form-cta { padding: 18px 34px; width: 100%; }
-  .consent-btns { flex-direction: column; gap: 14px; }
-  .consent-btn  { width: 100%; min-width: unset; padding: 0 34px; }
+  .consent-btns { gap: 12px; margin-top: 20px; }
+  .consent-btn  { flex: 1; min-width: unset; padding: 0 20px; }
   #bg {
     background:
       linear-gradient(
@@ -462,6 +462,6 @@ html, body {
   .body     { line-height: 1.6; font-size: 12px; margin-bottom: 8px; }
   .field    { margin-bottom: 14px; }
   .ghost    { display: none; }
-  .fit-note { margin-top: 16px; padding-top: 14px; }
+  .fit-note { margin-top: 16px; padding-top: 14px; margin-bottom: 18px; }
   #p2       { padding-top: 60px; justify-content: flex-start; }
 }
