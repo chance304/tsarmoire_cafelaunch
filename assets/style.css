@@ -6,18 +6,21 @@ html, body {
   background: #f6f4f0;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   BACKGROUND — PLACEHOLDER FOR DESIGN TEAM
-   Replace the gradient below with the confirmed image:
-   background: url('your-image.jpg') center/cover no-repeat;
-   Add a light overlay if needed for text legibility.
-═══════════════════════════════════════════════════════════ */
 #bg {
   position: fixed; inset: 0; z-index: 0;
   background:
-    radial-gradient(ellipse at 75% 10%, rgba(218,204,180,0.4) 0%, transparent 55%),
-    radial-gradient(ellipse at 15% 90%, rgba(186,172,138,0.25) 0%, transparent 50%),
-    linear-gradient(170deg, #f6f4f0 0%, #f0ebe2 30%, #ede7dc 60%, #f6f4f0 100%);
+    linear-gradient(
+      to right,
+      rgba(246,244,240,0.92) 0%,
+      rgba(246,244,240,0.65) 40%,
+      rgba(246,244,240,0.30) 100%
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(218,204,180,0.28) 0%,
+      rgba(186,172,138,0.18) 100%
+    ),
+    url('../bg_info.jpeg') 80% center / cover no-repeat;
   animation: breathe 18s ease-in-out infinite alternate;
 }
 
@@ -135,6 +138,18 @@ html, body {
 }
 
 .page.active { opacity: 1; pointer-events: all; }
+
+/* ── Form page — scrollable override ────────────────────── */
+#p2 {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  justify-content: flex-start;
+  padding-top: clamp(70px, 12vh, 110px);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+#p2::-webkit-scrollbar { display: none; }
+#p2 .ghost { display: none; }
 
 /* ── Page element atoms ──────────────────────────────────── */
 .tag {
@@ -351,6 +366,21 @@ html, body {
   .field    { margin-bottom: 22px; }
   .form-row { flex-direction: column; gap: 0; }
   .form-cta { padding: 18px 34px; width: 100%; }
+  #bg {
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(246,244,240,0.88) 0%,
+        rgba(246,244,240,0.55) 45%,
+        rgba(246,244,240,0.20) 100%
+      ),
+      linear-gradient(
+        to bottom,
+        rgba(218,204,180,0.28) 0%,
+        rgba(186,172,138,0.18) 100%
+      ),
+      url('../bg_info.jpeg') 65% center / cover no-repeat;
+  }
 }
 
 @media (max-width: 360px) {
@@ -367,7 +397,7 @@ html, body {
   .rule     { margin-bottom: 14px; }
   .headline { font-size: clamp(32px, 6vh, 56px); margin-bottom: 10px; }
   .body     { line-height: 1.6; font-size: 12px; margin-bottom: 8px; }
-  .field      { margin-bottom: 14px; }
-  .p2-scroll  { padding-bottom: 12px; }
-  .ghost      { display: none; }
+  .field    { margin-bottom: 14px; }
+  .ghost    { display: none; }
+  #p2       { padding-top: 60px; justify-content: flex-start; }
 }
