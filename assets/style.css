@@ -11,9 +11,9 @@ html, body {
   background:
     linear-gradient(
       to right,
-      rgba(246,244,240,0.92) 0%,
-      rgba(246,244,240,0.65) 40%,
-      rgba(246,244,240,0.30) 100%
+      rgba(246,244,240,0.97) 0%,
+      rgba(246,244,240,0.82) 40%,
+      rgba(246,244,240,0.55) 100%
     ),
     linear-gradient(
       to bottom,
@@ -196,7 +196,7 @@ html, body {
 .body {
   font-family: 'Jost', sans-serif;
   font-weight: 400;
-  font-size: clamp(15px, 1.8vw, 18px);
+  font-size: clamp(17px, 1.8vw, 20px);
   color: #151514;
   line-height: 1.95;
   max-width: min(430px, 100%);
@@ -433,9 +433,9 @@ html, body {
     background:
       linear-gradient(
         to bottom,
-        rgba(246,244,240,0.88) 0%,
-        rgba(246,244,240,0.55) 45%,
-        rgba(246,244,240,0.20) 100%
+        rgba(246,244,240,0.95) 0%,
+        rgba(246,244,240,0.78) 45%,
+        rgba(246,244,240,0.48) 100%
       ),
       linear-gradient(
         to bottom,
