@@ -138,6 +138,17 @@ html, body {
 
 .page.active { opacity: 1; pointer-events: all; }
 
+/* ── Consent page — scrollable override ─────────────────── */
+#p2 {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  justify-content: flex-start;
+  padding-top: clamp(70px, 12vh, 110px);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+#p2::-webkit-scrollbar { display: none; }
+
 /* ── Form page — scrollable override ────────────────────── */
 #p3 {
   overflow-y: auto;
@@ -338,6 +349,30 @@ html, body {
   color: #151514;
 }
 
+/* ── Fit note ────────────────────────────────────────────── */
+.fit-note {
+  margin-top: 28px;
+  padding-top: 22px;
+  border-top: 1px solid #Daccb4;
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: clamp(11px, 1.1vw, 12.5px);
+  color: rgba(21,20,20,0.72);
+  line-height: 1.85;
+  max-width: min(380px, 100%);
+}
+
+.fit-note-label {
+  display: block;
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 9px;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+  color: #7a6948;
+  margin-bottom: 10px;
+}
+
 /* ── Stagger-in animation system ────────────────────────── */
 .s {
   opacity: 0;
@@ -425,5 +460,6 @@ html, body {
   .body     { line-height: 1.6; font-size: 12px; margin-bottom: 8px; }
   .field    { margin-bottom: 14px; }
   .ghost    { display: none; }
+  .fit-note { margin-top: 16px; padding-top: 14px; }
   #p2       { padding-top: 60px; justify-content: flex-start; }
 }
