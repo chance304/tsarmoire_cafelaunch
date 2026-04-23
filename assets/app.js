@@ -1,7 +1,8 @@
 /* ── State ───────────────────────────────────────────────── */
-let cur   = 0;
-const N   = 4;
-let busy  = false;
+let cur          = 0;
+const N          = 5;
+let busy         = false;
+let socialConsent = null;
 
 const pages    = document.querySelectorAll('.page');
 const curtain  = document.getElementById('curtain');
@@ -17,8 +18,8 @@ function syncChrome() {
   counter.textContent = `${pad(cur)} / ${pad(N - 1)}`;
   progFill.style.width = `${((cur + 1) / N) * 100}%`;
   btnBack.disabled = cur === 0;
-  /* On form page: hide forward (submit only); on last page: hide both nav */
-  btnFwd.style.display  = (cur === N - 1 || cur === N - 2) ? 'none' : 'flex';
+  /* Hide forward on consent (2), form (3), and thank-you (4) — each uses its own action */
+  btnFwd.style.display  = (cur >= N - 3) ? 'none' : 'flex';
   btnBack.style.display = (cur === N - 1) ? 'none' : 'flex';
 }
 
@@ -69,6 +70,12 @@ function go(dir) {
     }, 60);
 
   }, 440);
+}
+
+/* ── Consent ─────────────────────────────────────────────── */
+function handleConsent(choice) {
+  socialConsent = choice;
+  go(1);
 }
 
 /* ── Registration ────────────────────────────────────────── */
@@ -139,13 +146,14 @@ function handleSubmit(e) {
 
   /* Build entry */
   const entry = {
-    id:            'tsa-' + Date.now(),
-    name:          nameVal,
-    email:         emailVal,
-    instagram:     igVal     || null,
-    tiktok:        tiktokVal || null,
-    phone:         phoneVal  || null,
-    registered_at: new Date().toISOString()
+    id:             'tsa-' + Date.now(),
+    name:           nameVal,
+    email:          emailVal,
+    instagram:      igVal     || null,
+    tiktok:         tiktokVal || null,
+    phone:          phoneVal  || null,
+    social_consent: socialConsent,
+    registered_at:  new Date().toISOString()
   };
 
   /* POST to Google Apps Script — wait for confirmed response */
@@ -182,9 +190,9 @@ function handleSubmit(e) {
 
 /* ── Keyboard ────────────────────────────────────────────── */
 document.addEventListener('keydown', e => {
-  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { if (cur !== 2) go(1); }
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { if (cur !== 2 && cur !== 3) go(1); }
   if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   go(-1);
-  if (e.key === 'Enter'      && cur !== 2)              go(1);
+  if (e.key === 'Enter'      && cur !== 2 && cur !== 3) go(1);
 });
 
 /* ── Touch / swipe ───────────────────────────────────────── */
@@ -194,7 +202,7 @@ document.addEventListener('touchstart', e => {
   ty = e.touches[0].clientY;
 }, { passive: true });
 document.addEventListener('touchend', e => {
-  if (cur === 2) return; /* form page: let native scroll handle all touch */
+  if (cur === 2 || cur === 3) return; /* consent + form pages: no swipe nav */
   const dx = e.changedTouches[0].clientX - tx;
   const dy = e.changedTouches[0].clientY - ty;
   /* only fire if gesture is clearly horizontal, not a scroll attempt */
