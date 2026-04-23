@@ -78,7 +78,7 @@ html, body {
   font-family: 'Jost', sans-serif;
   font-weight: 200; font-size: 11px;
   letter-spacing: 0.18em;
-  color: rgba(21,20,20,0.80);
+  color: #151514;
   transition: opacity 0.4s;
 }
 
@@ -190,15 +190,15 @@ html, body {
 
 .headline em {
   font-style: italic;
-  color: rgba(21,20,20,0.82);
+  color: #151514;
 }
 
 .body {
   font-family: 'Jost', sans-serif;
-  font-weight: 300;
-  font-size: clamp(13px, 1.35vw, 14.5px);
+  font-weight: 400;
+  font-size: clamp(15px, 1.8vw, 18px);
   color: #151514;
-  line-height: 2.05;
+  line-height: 1.95;
   max-width: min(430px, 100%);
   margin-bottom: 14px;
 }
@@ -210,9 +210,9 @@ html, body {
 
 .caption {
   font-family: 'Jost', sans-serif;
-  font-weight: 200; font-size: 10px;
+  font-weight: 300; font-size: 10px;
   letter-spacing: 0.3em;
-  color: rgba(21,20,20,0.90);
+  color: #151514;
   text-transform: uppercase;
   margin-top: 20px;
 }
@@ -243,7 +243,7 @@ html, body {
   font-family: 'Jost', sans-serif;
   font-weight: 300; font-size: 9.5px;
   letter-spacing: 0.38em;
-  color: rgba(21,20,20,0.88);
+  color: #151514;
   text-transform: uppercase;
   margin-bottom: 10px;
 }
@@ -265,7 +265,7 @@ html, body {
   border-bottom-color: #96815c;
 }
 
-.field input::placeholder { color: rgba(21,20,20,0.55); }
+.field input::placeholder { color: rgba(21,20,20,0.65); }
 
 .field input:-webkit-autofill,
 .field input:-webkit-autofill:focus {
@@ -320,7 +320,7 @@ html, body {
   font-weight: 300;
   font-size: 10px;
   letter-spacing: 0.04em;
-  color: rgba(21,20,20,0.80);
+  color: #151514;
   line-height: 1.6;
   max-width: 340px;
 }
@@ -357,9 +357,9 @@ html, body {
   border-top: 1px solid #Daccb4;
   margin-bottom: 32px;
   font-family: 'Jost', sans-serif;
-  font-weight: 300;
-  font-size: clamp(13px, 1.35vw, 15px);
-  color: rgba(21,20,20,0.82);
+  font-weight: 400;
+  font-size: clamp(14px, 1.5vw, 16px);
+  color: #151514;
   line-height: 1.9;
   max-width: min(420px, 100%);
 }
