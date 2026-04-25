@@ -131,7 +131,7 @@ function _sendConfirmation(d) {
         </p>
         <h1 style="font-size:2rem;margin:.25em 0;font-weight:400">Thank you, ${firstName}.</h1>
         <p style="line-height:1.7;color:#444">
-          We've received your interest in <strong>TSA CAFE</strong> on <strong>May 1</strong>.
+          We've received your interest in <strong>TSA CAFE</strong> on <strong>April 29</strong>.
           Our guest list is curated and intimate — if selected, we'll reach out to you directly.
           Keep an eye on your inbox.
         </p>
