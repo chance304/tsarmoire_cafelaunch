@@ -85,7 +85,7 @@ function handleConsent(choice) {
 
 /* ── Registration ────────────────────────────────────────── */
 const STORE_KEY  = 'tsa_cafe_registrations';
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyKEYDTfkPRtwqH0DIFsK3b83nFVxSZspI88u-P-cUr64LO61iCaJlz_uDjd-AZ598O/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyKuSCDIDko0cKfjoDf0yDtHA3cj_ErEvhNsvsbA5Eq4AvV6QBgwYQhmVUNuYeR5Mhb/exec';
 
 function setFieldError(fieldEl, errEl, msg) {
   fieldEl.classList.add('invalid');
