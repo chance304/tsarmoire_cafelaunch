@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-A single-page invitation microsite for the **TSA CAFE** pre-launch event (April 29) by T's Armoire. Deployed via GitHub Pages to `launch.tsarmoiremanufacturing.com.np` (CNAME).
+A single-page invitation microsite for the **TSA CAFE** pre-launch event (May 6) by T's Armoire. Deployed via GitHub Pages to `launch.tsarmoiremanufacturing.com.np` (CNAME).
 
 No build step, no dependencies, no test suite.
 

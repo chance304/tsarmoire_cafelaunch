@@ -1,6 +1,6 @@
 # TSA CAFE — Pre-Launch Microsite
 
-Invitation microsite for the **TSA CAFE** breakfast event (April 29) by T's Armoire.  
+Invitation microsite for the **TSA CAFE** breakfast event (May 6) by T's Armoire.  
 Live at: `launch.tsarmoiremanufacturing.com.np`
 
 ---
