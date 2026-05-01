@@ -1,13 +1,13 @@
-# TSA CAFE — Pre-Launch Microsite
+# TSA CAFÉ — Slot Reservation Microsite
 
-Invitation microsite for the **TSA CAFE** breakfast event (May 6) by T's Armoire.  
+Slot reservation microsite for the **TSA Café** 3-day event (May 8, 9 & 10) by T's Armoire.  
 Live at: `launch.tsarmoiremanufacturing.com.np`
 
 ---
 
 ## What it is
 
-A 5-page single-page app with a curtain-wipe transition system. Visitors move through an opening page, the event story, a social media consent screen, a registration form, and a thank-you page. Submissions are saved to a Google Sheet and trigger a confirmation email to the registrant.
+A 5-page single-page app with a curtain-wipe transition system. Visitors move through an opening page, the event story, a "What to Expect" content page, a date + time slot picker with a details form, and a confirmation page. Reservations are saved to a Google Sheet and trigger a confirmation email with the guest's chosen date and time.
 
 ## File structure
 
@@ -15,10 +15,10 @@ A 5-page single-page app with a curtain-wipe transition system. Visitors move th
 index.html          — markup only, no inline styles or scripts
 assets/
   style.css         — all styles and responsive breakpoints
-  app.js            — transitions, form logic, Apps Script POST
+  app.js            — transitions, slot picker logic, form validation, Apps Script POST/GET
   bg_info.jpeg      — confirmed background photo (TSA founder in studio)
 apps-script/
-  Code.gs           — backend: writes to Google Sheet + sends confirmation email
+  Code.gs           — backend: slot availability (doGet), reservations (doPost), confirmation email
 CNAME               — GitHub Pages custom domain
 DEPLOYMENT.md       — step-by-step deploy guide (Apps Script + GitHub Pages)
 ```
@@ -57,25 +57,30 @@ See `DEPLOYMENT.md` for the full Apps Script setup.
 
 | # | ID | Content |
 |---|---|---|
-| 1 | `#p0` | Opening — TSA CAFE |
+| 1 | `#p0` | Opening — TSA Café Reservation |
 | 2 | `#p1` | The Experience — event story |
-| 3 | `#p2` | Social Consent — Yes/No |
-| 4 | `#p3` | Registration Form |
-| 5 | `#p4` | Thank You |
+| 3 | `#p2` | What to Expect — experience highlights + Reserve your spot button |
+| 4 | `#p3` | Slot Reservation — date picker → time slot picker → details form |
+| 5 | `#p4` | Confirmation — "You're in. Your table is reserved." |
 
 ## Form fields collected
 
 | Field | Required | Notes |
 |---|---|---|
+| Date | Yes | May 8, May 9, or May 10 — selected via button picker |
+| Time Slot | Yes | One of 7 hourly slots — greyed out if at capacity (10/slot) |
 | Full Name | Yes | |
-| Email Address | Yes | Confirmation email + duplicate check |
+| Email Address | Yes | Confirmation email sent + duplicate check |
 | Instagram Handle | No | |
 | TikTok Handle | No | |
 | Phone Number | No | |
-| Social Consent | Auto | Set from consent page — `yes` or `no` |
+
+## Slot capacity
+
+Each time slot holds a maximum of **10 reservations per day**. The frontend fetches live booking counts via `doGet` when the guest reaches the reservation page, and greys out full slots. The backend enforces the cap server-side on every `doPost`.
 
 ## Known TODOs
 
-- `SCRIPT_URL` in `assets/app.js` points to a personal account deployment — redeploy from org account per `DEPLOYMENT.md` and update the URL
+- `SCRIPT_URL` in `assets/app.js` needs to be updated after deploying the new `Code.gs` — see `DEPLOYMENT.md`
 - Replace `GA_MEASUREMENT_ID` in `index.html` with the real Google Analytics property ID
 - Replace `og:image` placeholder path in `index.html` with the confirmed event photo

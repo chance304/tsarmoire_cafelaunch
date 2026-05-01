@@ -15,26 +15,26 @@ This must be done from the **T's Armoire Google account**, not a personal accoun
 ### Step 1 — Create the Google Sheet
 
 1. Go to [sheets.google.com](https://sheets.google.com) and sign in as T's Armoire
-2. Create a new spreadsheet, name it: `TSA CAFE Registrations`
+2. Create a new spreadsheet, name it: `TSA CAFÉ Reservations`
 3. Leave it empty — the script creates the header row automatically on first submission
 
 The sheet will have the following columns once the first submission arrives:
 
-| ID | Name | Email | Instagram | TikTok | Phone | Registered At | Social Consent |
+| ID | Name | Email | Instagram | TikTok | Phone | Date | Time Slot | Registered At |
 
 ### Step 2 — Create the Apps Script project
 
 1. In the spreadsheet, click **Extensions → Apps Script**
 2. Delete all placeholder code
 3. Copy the contents of `apps-script/Code.gs` from this repo and paste it in
-4. Click **Save** (name the project anything, e.g. `TSA CAFE Backend`)
+4. Click **Save** (name the project anything, e.g. `TSA CAFÉ Reservations Backend`)
 
 ### Step 3 — Deploy as a Web App
 
 1. Click **Deploy → New deployment**
 2. Click the gear icon next to "Select type" and choose **Web App**
 3. Set:
-   - **Description**: `TSA CAFE v1` (or anything)
+   - **Description**: `TSA CAFÉ Reservations v1` (or anything)
    - **Execute as**: `Me` (the T's Armoire account)
    - **Who has access**: `Anyone`
 4. Click **Deploy**
@@ -56,7 +56,7 @@ Commit and push:
 
 ```bash
 git add assets/app.js
-git commit -m "Switch Apps Script to org account deployment"
+git commit -m "Update SCRIPT_URL to org account deployment"
 git push origin main
 ```
 
@@ -74,22 +74,12 @@ If you edit `apps-script/Code.gs`, you must create a **new version** for changes
 
 > This updates the existing deployment URL — no need to change `SCRIPT_URL` in `app.js`.
 
-### If adding the Social Consent column to an existing sheet
-
-If the sheet already has rows from before the Social Consent column was added to `Code.gs`:
-
-1. Open the Google Sheet
-2. Click the header of column H and insert a column if needed
-3. Type `Social Consent` in cell H1
-
-New submissions will populate column H. Old rows will have empty cells there.
-
 ### If migrating from a previous deployment (e.g. personal → org account)
 
-If rows were already collected under a previous deployment, check that all column headers are present in row 1:
+If rows were already collected under a previous deployment, ensure all column headers are present in row 1 of the sheet:
 
 ```
-A: ID  B: Name  C: Email  D: Instagram  E: TikTok  F: Phone  G: Registered At  H: Social Consent
+A: ID  B: Name  C: Email  D: Instagram  E: TikTok  F: Phone  G: Date  H: Time Slot  I: Registered At
 ```
 
 Missing columns will cause new submissions to write data to the wrong columns.
@@ -100,7 +90,7 @@ Missing columns will cause new submissions to write data to the wrong columns.
 
 No manual action needed. GitHub Pages serves from the `main` branch root.
 
-- **Custom domain**: set via `CNAME` file (`launch.tsarmoiremanufacturing.com.np`)
+- **Custom domain**: set via `CNAME` file — update this file if the domain changes
 - **DNS**: CNAME record pointing to `<github-username>.github.io` must be set at your DNS provider
 
 Every `git push origin main` deploys automatically. Changes are live within ~30 seconds.
@@ -111,10 +101,10 @@ Every `git push origin main` deploys automatically. Changes are live within ~30 
 
 Before the site goes live:
 
-- [ ] Replace `og:image` in `index.html` with the confirmed event photo (currently placeholder path `assets/og-image.jpg`)
+- [ ] Update `SCRIPT_URL` in `assets/app.js` with the new Apps Script Web App URL
+- [ ] Replace `og:image` in `index.html` with the confirmed event photo (currently placeholder `assets/og-image.jpg`)
 - [ ] Replace `GA_MEASUREMENT_ID` in `index.html` with the real Google Analytics property ID
-- [ ] Write and link privacy policy page (required — site collects email and phone)
-- [ ] Migrate Apps Script deployment from personal account to T's Armoire org account and update `SCRIPT_URL` in `assets/app.js`
+- [ ] Update `CNAME` if the domain for this deployment differs from `launch.tsarmoiremanufacturing.com.np`
 
 ---
 
@@ -122,14 +112,19 @@ Before the site goes live:
 
 After deploying a new Apps Script URL:
 
-- [ ] Open the live site and navigate through all 5 pages (counter should read 01/05 → 05/05)
-- [ ] On page 3 (Social Consent), confirm Yes and No buttons advance to the form; back arrow returns to page 2
-- [ ] Submit the form (page 4) with all fields filled — confirm it waits for server response before advancing to thank-you
-- [ ] Confirm a new row appears in the Google Sheet with all 8 columns populated, including Social Consent as `yes` or `no`
-- [ ] Confirm the test email inbox receives the confirmation email
-- [ ] Submit the same email again — server should return `duplicate` error; form should show "Already registered" inline
-- [ ] Kill your network mid-submit — form should show "Something went wrong — please try again" and re-enable the button
-- [ ] Submit leaving TikTok and phone blank — sheet should show empty cells, no error
-- [ ] Test on mobile — form scrolls, button is reachable, no swipe navigation on consent or form pages
+- [ ] Open the live site — opening page shows TSA CAFÉ, dates May 8, 9 & 10, counter reads 01 / 05
+- [ ] Navigate forward through pages 1–3 (opening → experience → what to expect) using the forward arrow
+- [ ] On page 3 (What to Expect), click "Reserve your spot →" — confirms it advances to the slot picker
+- [ ] On page 4 (slot picker), click a date — time slots should appear
+- [ ] Select a time slot — the details form should appear below
+- [ ] Confirm full slots (10 bookings) appear greyed out and are not selectable
+- [ ] Submit the form with all fields filled — confirm it waits for server response before advancing to confirmation page
+- [ ] Confirm the confirmation page shows "You're In" / "Your table is reserved."
+- [ ] Confirm a new row appears in the Google Sheet with all 9 columns populated (ID, Name, Email, Instagram, TikTok, Phone, Date, Time Slot, Registered At)
+- [ ] Confirm the test email inbox receives the confirmation email with the correct date and time slot
+- [ ] Submit the same email again — server should return `duplicate` error; form should show "Already reserved with this email"
+- [ ] Test slot full response: manually insert 10 rows for one slot, then try to book it — server should return `slot_full`; frontend should deselect the slot and prompt to choose another
+- [ ] Kill network mid-submit — form should show "Something went wrong — please try again" and re-enable the button
+- [ ] Submit leaving Instagram, TikTok, and phone blank — sheet should show empty cells, no error
+- [ ] Test on mobile — date/slot buttons are tappable, form scrolls, no swipe navigation on slot picker page
 - [ ] Check the `Errors` tab in the Google Sheet exists and logs any backend failures
-- [ ] Confirm no submissions exceed the rate limit (15 per minute window)
