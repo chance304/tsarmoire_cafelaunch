@@ -1,8 +1,16 @@
-const SHEET_NAME = 'Registrations';
-const ERROR_SHEET = 'Errors';
+const SHEET_NAME     = 'Reservations';
+const ERROR_SHEET    = 'Errors';
 const RATE_LIMIT_KEY = 'rate_limit';
 const RATE_WINDOW_MS = 60 * 1000; /* 1 minute */
-const RATE_MAX = 15;              /* max submissions per window globally */
+const RATE_MAX       = 15;        /* max submissions per window globally */
+const SLOT_CAPACITY  = 10;        /* max reservations per date+slot */
+
+function doGet(e) {
+  if (e.parameter.action === 'slots') {
+    return _getSlotAvailability();
+  }
+  return _respond({ ok: false, error: 'unknown_action' });
+}
 
 function doPost(e) {
   let data;
@@ -31,6 +39,11 @@ function doPost(e) {
     return _respond({ ok: false, error: 'duplicate' });
   }
 
+  /* Server-side slot capacity check */
+  if (_isSlotFull(data.date, data.time_slot)) {
+    return _respond({ ok: false, error: 'slot_full' });
+  }
+
   /* Write to sheet — must succeed before email */
   try {
     _appendRow(data);
@@ -44,7 +57,6 @@ function doPost(e) {
     _sendConfirmation(data);
   } catch (err) {
     _logError('email', err);
-    /* Don't fail the registration — sheet write already succeeded */
   }
 
   return _respond({ ok: true });
@@ -62,6 +74,8 @@ function _validate(d) {
   if (!d.name || String(d.name).trim().length === 0) return 'name_required';
   const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!d.email || !emailRx.test(String(d.email).trim())) return 'invalid_email';
+  if (!d.date || String(d.date).trim().length === 0) return 'date_required';
+  if (!d.time_slot || String(d.time_slot).trim().length === 0) return 'slot_required';
   return null;
 }
 
@@ -75,7 +89,49 @@ function _isDuplicate(email) {
     return emails.some(row => String(row[0]).toLowerCase().trim() === target);
   } catch (err) {
     _logError('duplicate_check', err);
-    return false; /* fail open — don't block on check error */
+    return false; /* fail open */
+  }
+}
+
+function _isSlotFull(date, timeSlot) {
+  try {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const sheet = ss.getSheetByName(SHEET_NAME);
+    if (!sheet || sheet.getLastRow() < 2) return false;
+    /* Columns 7 (Date) and 8 (Time Slot) — 1-indexed */
+    const rows = sheet.getRange(2, 7, sheet.getLastRow() - 1, 2).getValues();
+    const count = rows.filter(row =>
+      String(row[0]).trim() === String(date).trim() &&
+      String(row[1]).trim() === String(timeSlot).trim()
+    ).length;
+    return count >= SLOT_CAPACITY;
+  } catch (err) {
+    _logError('slot_check', err);
+    return false; /* fail open */
+  }
+}
+
+function _getSlotAvailability() {
+  try {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const sheet = ss.getSheetByName(SHEET_NAME);
+    const slots = {};
+
+    if (sheet && sheet.getLastRow() >= 2) {
+      const rows = sheet.getRange(2, 7, sheet.getLastRow() - 1, 2).getValues();
+      rows.forEach(row => {
+        const date = String(row[0]).trim();
+        const slot = String(row[1]).trim();
+        if (!date || !slot) return;
+        if (!slots[date]) slots[date] = {};
+        slots[date][slot] = (slots[date][slot] || 0) + 1;
+      });
+    }
+
+    return _respond({ ok: true, slots });
+  } catch (err) {
+    _logError('slots_fetch', err);
+    return _respond({ ok: true, slots: {} }); /* fail open — show all available */
   }
 }
 
@@ -95,7 +151,7 @@ function _checkRateLimit() {
     props.setProperty(RATE_LIMIT_KEY, JSON.stringify(state));
     return true;
   } catch (err) {
-    return true; /* fail open — don't block on rate limit error */
+    return true; /* fail open */
   }
 }
 
@@ -104,18 +160,19 @@ function _appendRow(d) {
   let sheet = ss.getSheetByName(SHEET_NAME);
   if (!sheet) {
     sheet = ss.insertSheet(SHEET_NAME);
-    sheet.appendRow(['ID', 'Name', 'Email', 'Instagram', 'TikTok', 'Phone', 'Registered At', 'Social Consent']);
+    sheet.appendRow(['ID', 'Name', 'Email', 'Instagram', 'TikTok', 'Phone', 'Date', 'Time Slot', 'Registered At']);
     sheet.setFrozenRows(1);
   }
   sheet.appendRow([
     d.id,
     String(d.name).trim(),
     String(d.email).trim().toLowerCase(),
-    d.instagram      || '',
-    d.tiktok         || '',
-    d.phone          || '',
-    d.registered_at,
-    d.social_consent || ''
+    d.instagram  || '',
+    d.tiktok     || '',
+    d.phone      || '',
+    d.date       || '',
+    d.time_slot  || '',
+    d.registered_at
   ]);
 }
 
@@ -123,19 +180,26 @@ function _sendConfirmation(d) {
   const firstName = String(d.name).trim().split(/\s+/)[0];
   MailApp.sendEmail({
     to: d.email,
-    subject: "TSA CAFE — You're on the list",
+    subject: "TSA Café — Your table is reserved",
     htmlBody: `
       <div style="font-family:Georgia,serif;color:#151514;max-width:480px;margin:0 auto">
         <p style="letter-spacing:.12em;font-size:11px;text-transform:uppercase;color:#96815c">
           T's Armoire
         </p>
-        <h1 style="font-size:2rem;margin:.25em 0;font-weight:400">Thank you, ${firstName}.</h1>
-        <p style="line-height:1.7;color:#444">
-          We've received your interest in <strong>TSA CAFE</strong> on <strong>May 6</strong>.
-          Our guest list is curated and intimate — if selected, we'll reach out to you directly.
-          Keep an eye on your inbox.
+        <h1 style="font-size:2rem;margin:.25em 0;font-weight:400">You're in, ${firstName}.</h1>
+        <p style="line-height:1.7;color:#444;margin:.75em 0">
+          Your table at <strong>TSA Café</strong> is reserved.
         </p>
-        <p style="line-height:1.7;color:#888;font-size:.875rem">
+        <p style="line-height:1.7;color:#444;font-size:1.1rem;margin:.5em 0">
+          <strong>${d.date}</strong> &middot; ${d.time_slot}
+        </p>
+        <p style="line-height:1.7;color:#444;margin:.75em 0">
+          Get ready for good coffee, great fits, and an experience you'll want to stay in.
+        </p>
+        <p style="line-height:1.7;color:#444;margin:.75em 0">
+          We'll see you soon.
+        </p>
+        <p style="line-height:1.7;color:#888;font-size:.875rem;margin:1.5em 0 0">
           — The T's Armoire Team
         </p>
       </div>
