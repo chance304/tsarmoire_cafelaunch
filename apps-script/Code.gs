@@ -3,7 +3,7 @@ const ERROR_SHEET    = 'Errors';
 const RATE_LIMIT_KEY = 'rate_limit';
 const RATE_WINDOW_MS = 60 * 1000; /* 1 minute */
 const RATE_MAX       = 15;        /* max submissions per window globally */
-const SLOT_CAPACITY  = 10;        /* max reservations per date+slot */
+const SLOT_CAPACITY  = 6;         /* max reservations per date+slot: 1 solo + 5 +1 tables */
 
 function doGet(e) {
   if (e.parameter.action === 'slots') {

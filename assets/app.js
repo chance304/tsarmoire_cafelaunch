@@ -83,7 +83,7 @@ function updateSlotAvailability() {
   const counts = (slotData[selectedDate] || {});
   document.querySelectorAll('#slot-times .slot-btn').forEach(btn => {
     const slot = btn.dataset.slot;
-    const isFull = (counts[slot] || 0) >= 10;
+    const isFull = (counts[slot] || 0) >= 6;
     btn.classList.toggle('full', isFull);
     btn.disabled = isFull;
     if (isFull && btn.classList.contains('selected')) {
