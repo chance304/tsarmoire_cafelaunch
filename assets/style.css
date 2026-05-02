@@ -312,7 +312,11 @@ html, body {
 }
 
 .field.invalid .field-error  { display: block; }
-.field.invalid input         { border-bottom-color: rgba(180, 60, 40, 0.45); }
+.field.invalid label         { color: rgba(180, 60, 40, 0.85); }
+.field.invalid input {
+  border-bottom-color: rgba(180, 60, 40, 0.75);
+  background: rgba(180, 60, 40, 0.045);
+}
 
 .form-privacy {
   margin-top: 18px;
