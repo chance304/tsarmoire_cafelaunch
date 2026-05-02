@@ -64,8 +64,9 @@ function go(dir) {
 }
 
 /* ── Slot Availability ───────────────────────────────────── */
-const STORE_KEY  = 'tsa_cafe_reservations';
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyKuSCDIDko0cKfjoDf0yDtHA3cj_ErEvhNsvsbA5Eq4AvV6QBgwYQhmVUNuYeR5Mhb/exec';
+const STORE_KEY     = 'tsa_cafe_reservations';
+const SCRIPT_URL    = 'https://script.google.com/macros/s/AKfycbyKuSCDIDko0cKfjoDf0yDtHA3cj_ErEvhNsvsbA5Eq4AvV6QBgwYQhmVUNuYeR5Mhb/exec';
+const SLOT_CAPACITY = 5; /* 1 solo + 4 +1 tables */
 
 function fetchSlots() {
   fetch(SCRIPT_URL + '?action=slots')
@@ -83,7 +84,7 @@ function updateSlotAvailability() {
   const counts = (slotData[selectedDate] || {});
   document.querySelectorAll('#slot-times .slot-btn').forEach(btn => {
     const slot = btn.dataset.slot;
-    const isFull = (counts[slot] || 0) >= 6;
+    const isFull = (counts[slot] || 0) >= SLOT_CAPACITY;
     btn.classList.toggle('full', isFull);
     btn.disabled = isFull;
     if (isFull && btn.classList.contains('selected')) {
